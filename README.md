@@ -10,7 +10,19 @@ room111, UdK, medienhaus, kleistpark
 dates
 -----
 
-TODO
+- [ ] [19oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171019): introduction and overview
+- [ ] 26oct 14-16
+- [ ] 02nov: **NO CLASS** (i'm away)
+- [ ] 09nov 14-16
+- [ ] 16nov 14-16
+- [ ] 23nov 14-16
+- [ ] 30nov 14-16
+- [ ] 07dec 14-16
+- [ ] 14dec 14-16
+- [ ] 21dec: **NO CLASS**
+- [ ] 28dec: **NO CLASS**
+
+dates for jan-feb 2018 TODO
 
 links to previous semesters... <http://redfrik.github.io/udk00-Audiovisual_Programming/>
 
