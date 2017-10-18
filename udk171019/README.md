@@ -11,10 +11,14 @@ unity3d
 
 * start unity and create a new **2D** project. give it a name (here grid)
 * create a new script by selecting Assets / Create / C# Script
-  ![00script](00script.png?raw=true "00script")
+
+![00script](00script.png?raw=true "00script")
+
 * give the script a name by typing under the white icon (here Grid)
 * doublie click the white C# script icon to open it in MonoDevelop (the first time you might be asked to install extra stuff)
-  ![01icon](01icon.png?raw=true "01icon")
+
+![01icon](01icon.png?raw=true "01icon")
+
 * copy and paste in the code here below replacing all what was in the script originally
 
 ```cs
@@ -47,21 +51,33 @@ public class Grid : MonoBehaviour {
 * save and switch back to unity
 
 * in the upper left hierachy window, click to select the 'Main Camera'
-  ![02maincamera](02maincamera.png?raw=true "02maincamera")
+
+![02maincamera](02maincamera.png?raw=true "02maincamera")
+
 * to attach the script to the camera now select Component / Scripts / Grid (or whatever you called it)
-  ![03addscript](03addscript.png?raw=true "03addscript")
+
+![03addscript](03addscript.png?raw=true "03addscript")
+
 * you should see the following in the inspector window...
-  ![04inspector](04inspector.png?raw=true "04inspector")
+
+![04inspector](04inspector.png?raw=true "04inspector")
+
 * create a new sphere by selecting GameObject / 3D Object / Sphere.  this game object will become our prefab from which all the clones will be made
-  ![05sphere](05sphere.png?raw=true "05sphere")
+
+![05sphere](05sphere.png?raw=true "05sphere")
+
 * again select the main camera and in the inspector click on the little circle next to prefab and select the Sphere by doubleclicking in the dialog that pops up
 * your scene should now look like this...
-  ![06scene](06scene.png?raw=true "06scene")
+
+![06scene](06scene.png?raw=true "06scene")
+
 * click play (or press cmd+p)
 * change the numbers in various number boxes. try Camrot values - also go negative
 * click stop (or press cmd+p again)
 * select GameObject / Light / Directional Light
-  ![07light](07light.png?raw=true "07light")
+
+![07light](07light.png?raw=true "07light")
+
 * again press play and start changing things
 * things to try:
   * change the colour, intensity, type of the light (first select light in the hierarchy window)
@@ -117,7 +133,9 @@ note how this script is very similar to the 2d version above.
 * select GameObject / 3D Object / Cube
 * in the main camera inspector click on the little circle next to prefab and select the Cube by doubleclicking
 * your scene should now look like this...
+
 ![09cubescene](09cubescene.png?raw=true "09cubescene")
+
 * click play (or press cmd+p)
 * change the numbers in various number boxes. try Camrot values - also go negative
 * things to try:
