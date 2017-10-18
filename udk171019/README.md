@@ -5,12 +5,91 @@ introduction and overview
 * and dates + times for this course... <https://github.com/redFrik/udk18-Discrete_Structures> <-save this page
 
 unity3d
---
+==
 
 * install [unity](http://unity3d.com)
 
+* start unity and create a new **2D** project. give it a name (here grid)
+* create a new script by selecting Assets / Create / C# Script
+
+![00script](00script.png?raw=true "00script")
+
+* give the script a name (here Grid)
+* doublie click the white C# script icon to open it in MonoDevelop (the first time it might ask you to install)
+
+![01icon](01icon.png?raw=true "01icon")
+
+* copy and paste in the code below replacing all what was there
+
+```cs
+using UnityEngine;
+using System.Collections;
+
+public class Grid : MonoBehaviour {
+    public Transform prefab;    //holds our initial sphere
+    public Vector2 camrot;  //camera rotation x y
+    void Start() {
+        int dim = 20;    //20x20= 400
+        camrot.x = 0.3F;    //default x rotation speed
+        camrot.y = 0.2F;    //default y rotation speed
+        float spacing= 1.5F;    //space between spheres
+        float scale = 0.5F;        //size of spheres
+        prefab.transform.localScale = new Vector3(scale, scale, scale);
+        for (int x = 0; x < dim; x++) {
+            for (int y = 0; y < dim; y++) {
+                Instantiate(prefab, new Vector2(x-(dim/2), y-(dim/2))*spacing, Quaternion.identity);
+            }
+        }
+        transform.position= new Vector3(0, 0, 0);  //default camera position
+    }
+    void Update() {
+        transform.localEulerAngles= camrot*Time.frameCount;    //do the rotation each frame
+    }
+}
+```
+
+* save and switch back to unity
+
+* in the upper left hierachy window, click to select the 'Main Camera'
+
+![02maincamera](02maincamera.png?raw=true "02maincamera")
+
+* to attach the script to the camera select Component / Scripts / Grid (or whatever you called it)
+
+![03addscript](03addscript.png?raw=true "03addscript")
+
+* now you should see the following in the inspector window
+
+![04inspector](04inspector.png?raw=true "04inspector")
+
+* create a new sphere by selecting GameObject / 3D Object / Sphere.  this will become our prefab
+
+![05sphere](05sphere.png?raw=true "05sphere")
+
+* again select the main camera and in the inspector click on the little circle next to prefab and select the Sphere by doubleclicking in the dialog that pops up
+* your scene should now look like this...
+
+![06scene](06scene.png?raw=true "06scene")
+
+* click play (or press cmd+p)
+* change the numbers in various number boxes. try Camrot values - also go negative
+* click stop (or press cmd+p again)
+* select GameObject / Light / Directional Light
+
+![07light](07light.png?raw=true "07light")
+
+* again press play and start changing things
+* things to try:
+  * change the colour, intensity, type of the light (first select light in the hierarchy window)
+  * change camera position, scale, clear flag, projection, field of view (select camera in the hierarchy window)
+  * don't forget to mess with the Camrot values for x and y rotation speed
+  * also try to change the code in the script
+
+
+- - -
+ 
 supercollider
---
+==
 
 * install [supercollider](http://supercollider.github.io/download)
 
@@ -162,7 +241,7 @@ Pdef(\pat2, PmonoArtic(\avsynth,
     \legato, 0.1,
     \atk, 0.01,
     \rel, 0.5,
-    \pan, Pseq([-0.5, 0, 0.5], inf),
+    \pan, Pseq([-0.5, 0, 0.5], inf),  //panning left-right
 )).play;
 )
 
@@ -221,7 +300,6 @@ Pdef(\pat3).stop
 Pdef(\pat3).play
 Pdef(\pat2).play
 Pdef(\pat1).play
-
 
 //back to editing pat1
 (
@@ -408,15 +486,19 @@ Pdef(\pat3).fadeTime= 8;
 Pdef(\pat1).quant= 4;  //start next 4/4 bar
 Pdef(\pat2).quant= 4;
 Pdef(\pat3).quant= 4;
-
 Pdef(\pat3).stop;
 Pdef(\pat2).stop;
 Pdef(\pat1).stop;
+Pdef(\pat3).play;
+Pdef(\pat2).play;
+Pdef(\pat1).play;
 
-//etc. lots more to learn about pdef and pattern
+//etc. lots more to learn about pdef and patterns (Prand, Pwhite, Pseg)
 ```
 
 links
---
+==
 
 inspiration http://thedotisblack.tumblr.com
+
+Terry Riley - [A Rainbow in Curved Air](https://www.youtube.com/watch?v=5PNbEfLIEDs)
