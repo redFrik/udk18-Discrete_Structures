@@ -147,6 +147,12 @@ note how this script is very similar to the 2d version above.
 
 ![10cubes](10cubes.png?raw=true "10cubes")
 
+![11cubes2](11cubes2.png?raw=true "11cubes2")
+
+![12cubes3](12cubes3.png?raw=true "12cubes3")
+
+the screenshot above is with: `float spacing= 3.0F;` and `float scale = 0.9F;` in the script and a point light.
+
 - - -
  
 supercollider
