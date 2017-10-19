@@ -7,19 +7,19 @@ introduction and overview
 unity3d
 ==
 
-* install [unity](http://unity3d.com)
+* install [unity](http://unity3d.com) (the free version. one will need to register)
 
 * start unity and create a new **2D** project. give it a name (here grid)
 * create a new script by selecting Assets / Create / C# Script
 
 ![00script](00script.png?raw=true "00script")
 
-* give the script a name by typing under the white icon (here Grid)
-* doublie click the white C# script icon to open it in MonoDevelop (the first time you might be asked to install extra stuff)
+* give the script a name by typing something under the white icon (here Grid)
 
 ![01icon](01icon.png?raw=true "01icon")
 
-* copy and paste in the code here below replacing all what was in the script originally
+* doublie click the white C# script icon to open it in MonoDevelop (the first time you might be asked to install)
+* copy and paste in the code here below replacing what was there originally
 
 ```cs
 using UnityEngine;
@@ -28,7 +28,7 @@ using System.Collections;
 public class Grid : MonoBehaviour {
     public Transform prefab;    //holds our initial sphere
     public Vector2 camrot;  //camera rotation x y
-    void Start() {
+    void Start() {  //do once when starting
         int dim = 20;    //20x20= 400
         camrot.x = 0.3F;    //default x rotation speed
         camrot.y = 0.2F;    //default y rotation speed
@@ -42,8 +42,8 @@ public class Grid : MonoBehaviour {
         }
         transform.position= new Vector3(0, 0, 0);  //default camera position
     }
-    void Update() {
-        transform.localEulerAngles= camrot*Time.frameCount;    //do the rotation each frame
+    void Update() {  //do every frame - many times per second
+        transform.localEulerAngles= camrot*Time.frameCount;    //do the rotation - try to uncomment
     }
 }
 ```
@@ -54,19 +54,19 @@ public class Grid : MonoBehaviour {
 
 ![02maincamera](02maincamera.png?raw=true "02maincamera")
 
-* to attach the script to the camera now select Component / Scripts / Grid (or whatever you called it)
+* attach the script to the camera now by selecting Component / Scripts / Grid (or whatever you called it)
 
 ![03addscript](03addscript.png?raw=true "03addscript")
 
-* you should see the following in the inspector window...
+* you should see the following at the bottom of the main camera's inspector window...
 
 ![04inspector](04inspector.png?raw=true "04inspector")
 
-* create a new sphere by selecting GameObject / 3D Object / Sphere.  this game object will become our prefab from which all the clones will be made
+* create a new sphere by selecting GameObject / 3D Object / Sphere. this game object will become our prefab from which all clones will be made
 
 ![05sphere](05sphere.png?raw=true "05sphere")
 
-* again select the main camera and in the inspector click on the little circle next to prefab and select the Sphere by doubleclicking in the dialog that pops up
+* again select the main camera and in the inspector click on the little circle next to prefab. select the Sphere by doubleclicking in the dialog that pops up
 * your scene should now look like this...
 
 ![06scene](06scene.png?raw=true "06scene")
@@ -79,22 +79,35 @@ public class Grid : MonoBehaviour {
 ![07light](07light.png?raw=true "07light")
 
 * again press play and start changing things
+
+note: unity3d does not store your settings when you are in play mode. e.g. if you change the colour and intensity of the light while playing, when you stop these changes are lost. to make them permanent you will need be playing, change the values and copy the component under the the tool menu.
+
+![08copy](08copy.png?raw=true "08copy")
+
+then stop and select paste component (also under tool). when you play next time your modifications will be there.
+
+![09paste](09paste.png?raw=true "09paste")
+
+* play around some more and try to come up with something strange
 * things to try:
-  * change the colour, intensity, type of the light (first select light in the hierarchy window)
+  * change the colour, intensity, type of light (first select light in the hierarchy window)
   * change camera position, scale, clear flag, projection, field of view (select camera in the hierarchy window)
   * don't forget to mess with the Camrot values for x and y rotation speed
-  * also try to change the code in the script
+  * also try to change the code in the script. add more objects, change scaling and spacing
+  * etc
+
+![10strange](10strange.png?raw=true "10strange")
 
 3d
 --
 
-now we try the same thing but with cubes and in 3D...
+now we do the same thing again but with cubes and in 3D...
 
 * restart unity and create a new **3D** project. give it a name (here matrix)
 * create a new script by selecting Assets / Create / C# Script
 * give the script a name (here Matrix)
-* doublie click the icon to open it in MonoDevelop
-* copy and paste in the code here below replacing all what was in the script originally
+* double click the icon to open it in MonoDevelop
+* copy and paste in the code here below replacing what was there originally
 
 ```cs
 using UnityEngine;
@@ -107,13 +120,13 @@ public class Matrix : MonoBehaviour {
         int dim = 10;  //10x10x10= 1000. careful when increasing this - not too much
         camrot.x = 0.3F;
         camrot.y = 0.2F;
-        camrot.z = 0.1F;
+        camrot.z = 0.1F;        //note the third dimension
         float spacing= 5.0F;    //try changing this - around 2.0 is good
         float scale = 1.0F;        //and this - 0.1 is a good value
         prefab.transform.localScale = new Vector3 (scale, scale, scale);
         for (int x = 0; x < dim; x++) {
             for (int y = 0; y < dim; y++) {
-                for (int z = 0; z < dim; z++) {    //notice the third dimension
+                for (int z = 0; z < dim; z++) {    //note the third dimension
                     Instantiate(prefab, new Vector3(x-(dim/2), y-(dim/2), z-(dim/2))*spacing, Quaternion.identity);
                 }
             }
@@ -130,26 +143,26 @@ note how this script is very similar to the 2d version above.
 
 * save and switch back to unity
 * attach the script to the main camera by selecting Component / Scripts / Matrix (or whatever you called it)
-* select GameObject / 3D Object / Cube
+* create a new cube by selecting GameObject / 3D Object / Cube
 * in the main camera inspector click on the little circle next to prefab and select the Cube by doubleclicking
 * your scene should now look like this...
 
-![09cubescene](09cubescene.png?raw=true "09cubescene")
+![11cubescene](11cubescene.png?raw=true "11cubescene")
 
 * click play (or press cmd+p)
 * change the numbers in various number boxes. try Camrot values - also go negative
 * things to try:
-  * change the colour, intensity, type of the light
+  * change the colour, intensity, type of light
   * change camera position, scale, clear flag, projection, field of view
-  * also try to change the code in the script
-  * add more lights
+  * also try to change the code in the script. add more objects, change scaling and spacing
+  * add more lights in different colours
   * etc
 
-![10cubes](10cubes.png?raw=true "10cubes")
+![12cubes](12cubes.png?raw=true "12cubes")
 
-![11cubes2](11cubes2.png?raw=true "11cubes2")
+![13cubes2](13cubes2.png?raw=true "13cubes2")
 
-![12cubes3](12cubes3.png?raw=true "12cubes3")
+![14cubes3](14cubes3.png?raw=true "14cubes3")
 
 the screenshot above is with: `float spacing= 3.0F;` and `float scale = 0.9F;` in the script and a point light.
 
@@ -158,10 +171,12 @@ the screenshot above is with: `float spacing= 3.0F;` and `float scale = 0.9F;` i
 supercollider
 ==
 
-* install [supercollider](http://supercollider.github.io/download)
+* install [supercollider](http://supercollider.github.io/download) (most versions will work but v3.8 is recommended)
 
 * copy all the code below here into a new document
-* evaluate line by line, block by block
+* go through the code evaluating line by line, block by block
+  * to evaluate (run) a line, put the cursor on the line and press cmd+return
+  * to evaluate a block of code, put the cursor somewhere inside the () and press cmd+return
 
 ```supercollider
 //--boot the server
