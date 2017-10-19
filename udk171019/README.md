@@ -11,14 +11,19 @@ supercollider
 
 * copy all the code below here into a new document
 * go through the code evaluating line by line, block by block
-* to evaluate (run) a line, put the cursor on the line and press cmd+return
-* to evaluate a block of code, put the cursor somewhere inside the () and press cmd+return
+  * to evaluate (run) a line, put the cursor on the line and press cmd+return (or ctrl+return on windows)
+  * to evaluate a block of code, put the cursor somewhere inside the () and press cmd+return (or ctrl+return on windows)
+
+see http://doc.sccode.org/Guides/SCIde.html
 
 ```supercollider
 //--boot the server
 s.boot;
 s.meter;
 s.scope;
+
+{SinOsc.ar(MouseX.kr(400, 4000, 1)).dup}.play;
+//press cmd+. to stop (ctrl+. on windows)
 
 //--load sounds and effects
 (
@@ -417,6 +422,8 @@ Pdef(\pat1).play;
 //etc. lots more to learn about pdef and patterns (Prand, Pwhite, Pseg)
 ```
 
+you can learn more by clicking on something and pressing cmd+d (ctrl+d on windows). this will open the helpfile (for the things that have help that is - not everything do)
+
 - - -
 
 unity3d
@@ -427,7 +434,7 @@ unity3d
 
 ![00script](00script.png?raw=true "00script")
 
-* give the script a name by typing something under the white icon (here Grid)
+* give the script a name by typing something under the white icon. call it 'Grid'. (note: it needs to be named the same as in the script code below)
 
 ![01icon](01icon.png?raw=true "01icon")
 
@@ -467,7 +474,7 @@ public class Grid : MonoBehaviour {
 
 ![02maincamera](02maincamera.png?raw=true "02maincamera")
 
-* attach the script to the camera now by selecting Component / Scripts / Grid (or whatever you called it)
+* attach the script to the camera now by selecting Component / Scripts / Grid
 
 ![03addscript](03addscript.png?raw=true "03addscript")
 
@@ -516,7 +523,7 @@ then stop and select paste component (also under tool). when you play next time 
 
 now we do the same thing again but with cubes and in 3D...
 
-* restart unity and create a new **3D** project. give it a name (here matrix)
+* restart unity and create a new **3D** project. give it the name 'Matrix'
 * create a new script by selecting Assets / Create / C# Script
 * give the script a name (here Matrix)
 * double click the icon to open it in MonoDevelop
@@ -555,7 +562,7 @@ public class Matrix : MonoBehaviour {
 note how this script is very similar to the 2d version above.
 
 * save and switch back to unity
-* attach the script to the main camera by selecting Component / Scripts / Matrix (or whatever you called it)
+* attach the script to the main camera by selecting Component / Scripts / Matrix
 * create a new cube by selecting GameObject / 3D Object / Cube
 * in the main camera inspector click on the little circle next to prefab and select the Cube by doubleclicking
 * your scene should now look like this...

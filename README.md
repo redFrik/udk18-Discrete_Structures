@@ -10,7 +10,7 @@ room111, UdK, medienhaus, kleistpark
 dates
 -----
 
-- [ ] [19oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171019): introduction and overview
+- [x] [19oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171019): introduction and overview
 - [ ] 26oct 14-16
 - [ ] 02nov: **NO CLASS** (i'm away)
 - [ ] 09nov 14-16
