@@ -434,11 +434,11 @@ unity3d
 
 ![00script](00script.png?raw=true "00script")
 
-* give the script a name by typing something under the white icon. call it 'Grid'. (note: it needs to be named the same as in the script code below)
+* give the script the name 'Grid' by typing under the white icon. (note: it needs to be named the same as in the script code below)
 
 ![01icon](01icon.png?raw=true "01icon")
 
-* doublie click the white C# script icon to open it in MonoDevelop (the first time you might be asked to install)
+* double click the white C# script icon to open it in MonoDevelop (the first time you might be asked to install)
 * copy and paste in the code here below replacing what was there originally
 
 ```cs
@@ -525,7 +525,7 @@ now we do the same thing again but with cubes and in 3D...
 
 * restart unity and create a new **3D** project. give it the name 'Matrix'
 * create a new script by selecting Assets / Create / C# Script
-* give the script a name (here Matrix)
+* give the script the name 'Matrix'
 * double click the icon to open it in MonoDevelop
 * copy and paste in the code here below replacing what was there originally
 

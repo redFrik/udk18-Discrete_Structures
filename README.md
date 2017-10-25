@@ -11,7 +11,7 @@ dates
 -----
 
 - [x] [19oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171019): introduction and overview
-- [ ] 26oct 14-16
+- [ ] [26oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171026): pattern phasing
 - [ ] 02nov: **NO CLASS** (i'm away)
 - [ ] 09nov 14-16
 - [ ] 16nov 14-16
@@ -21,8 +21,11 @@ dates
 - [ ] 14dec 14-16
 - [ ] 21dec: **NO CLASS**
 - [ ] 28dec: **NO CLASS**
-
-dates for jan-feb 2018 TODO
+- [ ] 04jan: **NO CLASS**
+- [ ] 11jan 14-16
+- [ ] 18jan 14-16
+- [ ] 25jan 14-16
+- [ ] 1feb 14-16 (last meeting)
 
 links to previous semesters... <http://redfrik.github.io/udk00-Audiovisual_Programming/>
 
