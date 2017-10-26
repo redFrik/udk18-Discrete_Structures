@@ -6,32 +6,34 @@ this time we will experiment with a very (the most?) simple way of combining pat
 supercollider
 ==
 
+first a brief overview...
+
+- `Pseq` - seq stands for sequence and P for pattern
+- `Pseq([1, 2, 3, 4, 5], inf);` - numbers in a sequence. `inf` is the number of repetitions (inf= infinite)
+- `Pseq([1, 2, 3, 4, 5], 3);` - this will repeate only 3 times and then the pattern is finished
+- `Pseq([0.1, 4, 0.3, -3], inf);` - can contain any numbers (and also symbols or other patterns)
+ - `Pseq([0, 1, Pseq([5, 4, 3], 2), -1], inf);` - nested patterns. result: `0, 1, 5, 4, 3, 5, 4, 3, -1, 0, 1, 5, 4 3, 5, 4, 3, -1, 0, 1` etc infinite times
+
+ - `Pdef` - def stands for definition. here used as a kind of global variable / placeholder
+ - `Pdef(\somename).play;`  - start the Pdef named \somename
+ - `Pdef(\somename).stop;` - stop \somename. i.e. reference the Pdef by name
+ - `Pdef(\other).stop;` - refer to another Pdef called \other and stop it
+
+ - `PmonoArtic`  - is our monophonic sequencer. it has a lot of built-in functionallity but we only need to give it a few arguments - the rest defaults
+ - `a= PmonoArtic(\mysound).play;` - first argument is synthdef name (here causes error because we did not load any sound called \mysound yet)
+ - `a.stop;`- stop the [broken] sequencer
+ 
+ - `a= PmonoArtic(\mysound, \freq, 400, \amp, 0.2).play;` - additional arguments after synthdef name are then all key, value pairs
+ - `a.stop;`
+ - `a= PmonoArtic(\mysound, \freq, Pseq([400, 500, 600, 700], inf), \amp, 0.2).play;` - or key, pattern pairs
+ - `a.stop;`
+
+these key, value paris can either be controlling the PmonoArtic or the SynthDef. it is difficult in the beginning to discern between which keys belong to which. below `legato` and `dur` are for PmonoArtic while the rest will control the synth.
+
 ```supercollider
 s.boot;
 s.meter;
 s.scope;
-
-//--brief overview
-Pseq  //seq stands for sequence and P for pattern
-Pseq([1, 2, 3, 4, 5], inf);  //numbers in a sequence form a pattern, inf is the number of repetitions (inf= infinite)
-Pseq([1, 2, 3, 4, 5], 3);  //this will repeate only 3 times and then the pattern is finished
-Pseq([0.1, 4, 0.3, -3], inf);  //can be any numbers (and also symbols or other patterns)
-Pseq([0, 1, Pseq([5, 4, 3], 2), -1], inf);  //nested patterns. result: 0, 1, 5, 4, 3, 5, 4, 3, -1, 0, 1, 5, 4 3, 5, 4, 3, -1, 0, 1 etc infinite times
-
-Pdef  //def stands for definition. here used as a kind of global variable / placeholder
-Pdef(\somename).play;  //start the Pdef named \somename
-Pdef(\somename).stop;  //stop \somename
-Pdef(\other).stop;     //refer to another Pdef called \other and stop it
-
-PmonoArtic  //is our monophonic sequencer. it has a lot of built-in functionallity
-a= PmonoArtic(\mysound).play;  //first argument must be synthdef name (here causes error because we did not load any sound called \mysound yet)
-a.stop;  //stop the [broken] sequencer
-//additional arguments are then key, value pairs. or key, pattern pairs. for example...
-a= PmonoArtic(\mysound, \freq, 400, \amp, 0.2).play;  //start sequencer with mysound - frequency 400 and amplitude 0.2
-a.stop;
-a= PmonoArtic(\mysound, \freq, Pseq([400, 500, 600, 700], inf), \amp, 0.2).play;  //here instead of 400 static value we use a pattern
-a.stop;
-//below we will look at more PmonoArtic functions
 
 
 //--load a sound
@@ -69,6 +71,7 @@ Pdef(\ping1, PmonoArtic(\avping,
 Pdef(\ping1).stop;  //stop the sequencer that we stored with the name \ping1 in a Pdef
 
 //two sequences - starts in sync but then drifts apart
+//because the second sequencer have a pattern with 5 frequencies while the first only 4
 (
 Pdef(\ping1, PmonoArtic(\avping,  //same as above
     \freq, Pseq([300, 400, 600, 533], inf),
@@ -90,7 +93,7 @@ Pdef(\ping2, PmonoArtic(\avping,  //this second one is the lower frequency
 )).play;
 )
 
-//adding a third sequencer
+//adding a third sequencer - this one 6 frequencies in its pattern - also plays with double duration
 (
 Pdef(\ping3, PmonoArtic(\avping,
     \freq, Pseq([300, 400, 600, 533, 400, 300], inf)*2,  //added one frequency (300) and octave up(*2)
@@ -106,6 +109,8 @@ Pdef(\ping3, PmonoArtic(\avping,
 Pdef(\ping1).stop;
 Pdef(\ping2).stop;
 Pdef(\ping3).stop;
+
+//so with such simple patterns of different length you get a very long repetition cycle
 
 
 //--pattern basics
@@ -145,7 +150,7 @@ Pdef(\ping1, PmonoArtic(\avping,
 )).play;
 )
 
-//now patterns with different lengths (not divisable by 4 like above)
+//now patterns with different lengths (isorhythms)
 (
 Pdef(\ping1, PmonoArtic(\avping,
     \freq, Pseq([300, 400, 600, 533], inf),
@@ -154,6 +159,8 @@ Pdef(\ping1, PmonoArtic(\avping,
     \amp, Pseq([1, 1, 0.25, 0, 0.5], inf),  //5 in total - gives five amplitudes against four frequencies
 )).play;
 )
+
+//because there is 4 frequencies and 5 amplitudes, the total cycle will start over and repeate every 20th beat (4.lcm(5))
 
 (
 Pdef(\ping1, PmonoArtic(\avping,
@@ -164,7 +171,9 @@ Pdef(\ping1, PmonoArtic(\avping,
 )).play;
 )
 
-//six against five against four
+//for this the total cycle length is 30th beats (5.lcm(6))
+
+//six against five against four (repeats every 60th beat ([4, 5, 6].reduce('lcm')))
 (
 Pdef(\ping1, PmonoArtic(\avping,
     \freq, Pseq([300, 400, 600, 533, 800, 700], inf),
@@ -174,7 +183,7 @@ Pdef(\ping1, PmonoArtic(\avping,
 )).play;
 )
 
-//six against five against four against three against two
+//six against five against four against three against two (also repeats after 60 beats because 4 and 6 divides evenly with 2 and 3)
 (
 Pdef(\ping1, PmonoArtic(\avping,
     \freq, Pseq([300, 400, 600, 533, 800, 700], inf),
@@ -186,7 +195,7 @@ Pdef(\ping1, PmonoArtic(\avping,
 )).play;
 )
 
-//but quickly more complex with 7 instead of 6 frequencies
+//but quickly more complex with 7 instead of 6 frequencies (now repeate every 420th beat [4, 5, 7, 3, 2].reduce('lcm'))
 (
 Pdef(\ping1, PmonoArtic(\avping,
     \freq, Pseq([300, 400, 600, 533, 800, 700, 500], inf),
@@ -198,7 +207,7 @@ Pdef(\ping1, PmonoArtic(\avping,
 )).play;
 )
 
-//lots of parameters and patterns
+//lots of parameters and patterns of different length (repeats every 13860 beat)
 (
 Pdef(\ping1, PmonoArtic(\avping,
     \freq, Pseq([300, 400, 600, 533, 800, 700, 500], inf),
@@ -356,8 +365,7 @@ Pdef(\ping2, PmonoArtic(\avping,
 //try to extend and add many more pings - all with different dur. e.g. 0.25, 0.252, 0.254, 0.256 etc.
 
 
-//--clapping music
-//Steve Reich - Clapping Music https://www.youtube.com/watch?v=lzkOFJMI5i8
+//--Steve Reich - Clapping Music
 //notic how the pattern is 12 beats long and is to be repeated 8 times
 //then each 8x the second pattern adds one single beat (a pause) to the end
 //so the two patterns are phasing out of sync in discrete steps
@@ -390,8 +398,7 @@ Pdef(\counter, PmonoArtic(\avping,
 )
 
 
-//--piano phase
-//Steve Reich - Piano Phase https://www.youtube.com/watch?v=7P_9hDzG1i0
+//--Steve Reich - Piano Phase
 //simplified version - same phrase for both sequencers - only difference is that the second one play slightly slower
 (
 Pdef(\ping1).stop;
@@ -458,6 +465,7 @@ unity3d
 ==
 
 these examples are very similar to [last week](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171019#unity3d). see there for screenshots of menus etc.
+and just like last week's example we will let the script create a lot of objects from a single prefab. the difference now is that we will rotate each object separately and not just rotate the main camera.
 
 * start unity and create a new **2D** project. give it a name (here phasing2d)
 * create a new script by selecting Assets / Create / C# Script
@@ -646,6 +654,8 @@ clones.Add(Instantiate(prefab, new Vector3(xx*zz, yy*zz, z/(1.0F*dim)*2-1)*4.5F*
 links
 ==
 
-Steve Reich - Clapping Music https://www.youtube.com/watch?v=QNZQzpWCTlA
+Steve Reich - Clapping Music https://www.youtube.com/watch?v=QNZQzpWCTlA and https://www.youtube.com/watch?v=lzkOFJMI5i8
+
+Steve Reich - Piano Phase https://www.youtube.com/watch?v=7P_9hDzG1i0
 
 poi https://www.youtube.com/watch?v=PHOO01O_pAQ
