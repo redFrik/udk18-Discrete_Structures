@@ -11,7 +11,7 @@ dates
 -----
 
 - [x] [19oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171019): introduction and overview
-- [ ] [26oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171026): pattern phasing
+- [x] [26oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171026): pattern phasing
 - [ ] 02nov: **NO CLASS** (i'm away)
 - [ ] 09nov 14-16
 - [ ] 16nov 14-16
