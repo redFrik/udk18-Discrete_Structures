@@ -1,7 +1,7 @@
 pattern phasing
 --------------------
 
-this time we will experiment with a very (the most?) simple way of combining patterns... shifting one of them in time or space so that they play out of phase.
+this time we will experiment with a very (the most?) simple way of combining patterns... shifting one of them in time or in space so that they play out of phase.
 
 supercollider
 ==
@@ -11,6 +11,7 @@ s.boot;
 s.meter;
 s.scope;
 
+//--brief overview
 Pseq  //seq stands for sequence and P for pattern
 Pseq([1, 2, 3, 4, 5], inf);  //numbers in a sequence form a pattern, inf is the number of repetitions (inf= infinite)
 Pseq([1, 2, 3, 4, 5], 3);  //this will repeate only 3 times and then the pattern is finished
@@ -33,7 +34,7 @@ a.stop;
 //below we will look at more PmonoArtic functions
 
 
-//--load sounds and effects
+//--load a sound
 (
 SynthDef(\avping, {|out= 0, freq= 400, atk= 0.01, rel= 0.1, cur= -4, amp= 0.1, gate= 1, pan= 0, mod= 1|
     var env= EnvGen.ar(Env.asr(atk, 1, rel, cur), gate, doneAction:2);
@@ -391,27 +392,27 @@ Pdef(\counter, PmonoArtic(\avping,
 
 //--piano phase
 //Steve Reich - Piano Phase https://www.youtube.com/watch?v=7P_9hDzG1i0
-//simplified version
+//simplified version - same phrase for both sequencers - only difference is that the second one play slightly slower
 (
 Pdef(\ping1).stop;
 Pdef(\ping2).stop;
 Pdef(\ping1, PmonoArtic(\avping,
-\freq, Pseq([64, 66, 71, 73, 74, 66, 64, 73, 71, 66, 74, 73], inf).midicps,
-\dur, 0.125,
-\legato, 0.4,
-\amp, 0.5,
-\atk, 0.002,
-\rel, 0.15,
-\pan, -0.5,
+    \freq, Pseq([64, 66, 71, 73, 74, 66, 64, 73, 71, 66, 74, 73], inf).midicps,  //midicps convert from midi to Hz (cycles per second)
+    \dur, 0.125,
+    \legato, 0.4,
+    \amp, 0.5,
+    \atk, 0.002,
+    \rel, 0.15,
+    \pan, -0.5,
 )).play;
 Pdef(\ping2, PmonoArtic(\avping,
-\freq, Pseq([64, 66, 71, 73, 74, 66, 64, 73, 71, 66, 74, 73], inf).midicps,
-\dur, Pseq([0.1254], inf),  //notice the difference here - try different values
-\legato, 0.4,
-\amp, 0.5,
-\atk, 0.002,
-\rel, 0.15,
-\pan, 0.5,
+    \freq, Pseq([64, 66, 71, 73, 74, 66, 64, 73, 71, 66, 74, 73], inf).midicps,
+    \dur, Pseq([0.1254], inf),  //notice the difference here - try different values
+    \legato, 0.4,
+    \amp, 0.5,
+    \atk, 0.002,
+    \rel, 0.15,
+    \pan, 0.5,
 )).play;
 )
 
@@ -456,6 +457,189 @@ SynthDef(\avping, {|out= 0, freq= 400, atk= 0.01, rel= 0.1, cur= -4, amp= 0.1, g
 unity3d
 ==
 
+these examples are very similar to [last week](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171019#unity3d). see there for screenshots of menus etc.
+
+* start unity and create a new **2D** project. give it a name (here phasing2d)
+* create a new script by selecting Assets / Create / C# Script
+* give the script the name 'Phasing2D' by typing under the white icon
+* double click the white C# script icon to open it in MonoDevelop
+* copy and paste in the code here below replacing what was there originally
+
+```cs
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+
+public class Phasing2D : MonoBehaviour {
+    public Transform prefab;    //holds our initial gameobject
+    List<Transform> clones = new List<Transform>();
+    int dim = 10;    //10x10= 100 objects in total
+    public Vector2 rotationSpeed;  //rotation in x y
+    public float spread= 0.0F;  //phasing offset
+    void Start() {  //do once when starting
+        float spacing= 1.25F;    //space between gameobjects
+        float scale = 0.25F;     //size of gameobject
+        rotationSpeed.x= 1.0F;
+        rotationSpeed.y= 1.0F;
+        prefab.transform.localScale = new Vector3(scale, scale, scale);
+        for (int x = 0; x < dim; x++) {  //the order in which clones are created matter
+            for (int y = 0; y < dim; y++) {  //try swapping the x and y loops here
+                clones.Add(Instantiate(prefab, new Vector2(x-(dim/2), y-(dim/2))*spacing, Quaternion.identity));
+            }
+        }
+        transform.position= new Vector3(0, 0, 0);  //default camera position
+    }
+    void Update() {  //do every frame - many times per second
+        int i= 0;
+        foreach(Transform ct in clones) {
+            ct.localEulerAngles = rotationSpeed*(Time.frameCount+(i*spread));
+            i++;
+        }
+    }
+}
+```
+
+* save and switch back to unity
+* in the upper left hierachy window, click to select the 'Main Camera'
+* attach the script to the camera by selecting Component / Scripts / Phasing2D
+* create a new plane by selecting GameObject / 3D Object / Plane. this game object will become our prefab from which all clones will be made
+* again select the main camera and in the inspector click on the little circle next to prefab. select the Plane by doubleclicking in the dialog that pops up
+* create a light by selecting GameObject / Light / Directional Light
+* your scene should now look like this...
+
+![00scene](00scene.png?raw=true "00scene")
+
+* click play (or press cmd+p)
+* change the numbers in various number boxes. try rotationSpeed and spread values - also go negative
+* click stop (or press cmd+p again)
+
+remember: unity3d does not store your settings when you are in play mode.
+
+* stop and select Assets / Create / Material
+* give the material a name (here 'PhasingMat') by typing under the icon
+* in the upper left hierachy window, click to select the 'Plane'
+* in the inspector find Materials and then under there click on the little circle next to Element 0. select the PhasingMat by doubleclicking in the dialog that pops up
+* you should now see something like this...
+
+![01material](01material.png?raw=true "01material")
+
+* play around some more and try to come up with something strange
+* things to try:
+  * change the colour, metallic, smoothness of the material
+  * change the colour, intensity, position etc of the light
+  * change camera clear flag, projection, field of view etc
+  * don't forget to mess with the rotationSpeed and spread values
+  * also try to change the code in the script. add more objects, change scaling and spacing
+  * etc
+
+![02strange](02strange.png?raw=true "02strange")
+
+let us try to arrange the objects in a circle instead of in a square. so in the code we will use sin and cos math functions instead of x (rows) and y (columns).
+
+* open the C# code and find line 19. replace what is there with this...
+
+```cs
+clones.Add(Instantiate(prefab, new Vector2(Mathf.Sin((x*dim+y)/Mathf.PI*2*dim*dim), Mathf.Cos((x*dim+y)/Mathf.PI*2*dim*dim))*3.3F*spacing, Quaternion.identity));
+```
+* save and switch back to unity
+* again play around with the values - specially the x, y rotation speeds and the spread variable (also go negative).
+
+![03circle](03circle.png?raw=true "03circle")
+
+3d
+--
+
+again we now repeate the same thing but with cubes and in 3D...
+
+* restart unity and create a new **3D** project. give it a name (here phasing3d)
+* create a new script by selecting Assets / Create / C# Script
+* give the script the name 'Phasing3D' by typing under the white icon
+* double click the white C# script icon to open it in MonoDevelop
+* copy and paste in the code here below replacing what was there originally
+
+```cs
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class Phasing3D : MonoBehaviour {
+    public Transform prefab;    //holds our initial gameobject
+    List<Transform> clones = new List<Transform>();
+    int dim = 10;    //10x10*10= 1000 objects in total
+    public Vector3 rotationSpeed;  //rotation in x y z
+    public float spread= 0.0F;     //phasing offset
+    public Vector3 scaling;        //scaling in x y z
+    void Start() {  //do once when starting
+        float spacing= 1.25F;    //space between gameobjects
+        float scale = 0.5F;     //size of gameobject
+        rotationSpeed.x= 1.0F;
+        rotationSpeed.y= 1.0F;
+        rotationSpeed.z= 1.0F;
+        scaling.x= 1.0F;
+        scaling.y= 1.0F;
+        scaling.z= 1.0F;
+        prefab.transform.localScale = new Vector3(scale, scale, scale);
+        for (int x = 0; x < dim; x++) {
+            for (int y = 0; y < dim; y++) {
+                for (int z = 0; z < dim; z++) {
+                    clones.Add(Instantiate (prefab, new Vector3(x-(dim/2), y-(dim/2), z-(dim/2))*spacing, Quaternion.identity));
+                }
+            }
+        }
+        transform.position= new Vector3(0, 0, -10);  //default camera position
+    }
+    void Update() {  //do every frame - many times per second
+        int i= 0;
+        foreach(Transform ct in clones) {
+            ct.localEulerAngles = rotationSpeed*(Time.frameCount+(i*spread));
+            ct.localScale = scaling*((i+1)/(1.0F*dim*dim*dim));
+            i++;
+        }
+    }
+}
+```
+note how this script is very similar to the 2d version above.
+
+* save and switch back to unity
+* attach the script to the main camera by selecting Component / Scripts / Phasing3D
+* create a new cube by selecting GameObject / 3D Object / Cube
+* in the main camera inspector click on the little circle next to prefab and select the Cube by doubleclicking
+* click play (or press cmd+p)
+* by default your scene should now look like this...
+
+![04cubes](04cubes.png?raw=true "04cubes")
+
+* now change the numbers in various number boxes. try rotationSpeed and spread values - also go negative
+* things to try:
+  * change the colour, intensity, type of light
+  * change camera position, scale, clear flag, projection, field of view
+  * also try to change the code in the script. add more objects, change scaling and spacing
+  * add more lights in different colours
+  * etc
+
+* stop and select Assets / Create / Material
+* give the material a name (here 'PhasingMat') by typing under the icon
+* in the upper left hierachy window, click to select the 'Cube'
+* in the inspector find Materials and then under there click on the little circle next to Element 0. select the PhasingMat by doubleclicking in the dialog that pops up
+* click play (or press cmd+p) and start chaning things - also the material
+
+![05cubeofcubes](05cubeofcubes.png?raw=true "05cubeofcubes")
+
+last we arrange the cubes in a sphere...
+
+* open the C# code and find line 21 (the z for loop). replace what is there with these lines...
+
+```cs
+float xx = Mathf.Sin ((x * dim + y) / Mathf.PI * 2 * dim * dim);
+float yy = Mathf.Cos ((x * dim + y) / Mathf.PI * 2 * dim * dim);
+float zz = Mathf.Sin (z / (1.0F * dim)*Mathf.PI);
+clones.Add(Instantiate(prefab, new Vector3(xx*zz, yy*zz, z/(1.0F*dim)*2-1)*4.5F*spacing, Quaternion.identity));
+```
+
+* save and switch back to unity
+* again play around with the values - specially the spread and scaling variables (also go negative).
+
+![06sphereofcubes](06sphereofcubes.png?raw=true "06sphereofcubes")
 
 - - -
 
