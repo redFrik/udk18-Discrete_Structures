@@ -29,6 +29,13 @@ CmdPeriod.doOnce({win.close});
 win.front;
 )
 
+~speed= -0.1
+~spread= 50
+~num= 5
+~radius= 25
 
-~radius= 5
-~spread= 3
+
+~speed= pi*0.99
+~spread= 30
+~num= 10
+~radius= 15
