@@ -14,9 +14,9 @@ http://www.memo.tv/simple-harmonic-motion-12-for-16-percussionists-at-rncm/
 supercollider
 ==
 
-first open and run the code in ![whitney.scd](whitney.scd?raw=true "whitney.scd")
+first open and run the code in [whitney.scd](whitney.scd)
 
-and then ![whitney2.scd](whitney2.scd?raw=true "whitney2.scd")
+and then [whitney2.scd](whitney2.scd)
 
 ```supercollider
 s.boot;
