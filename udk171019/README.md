@@ -91,7 +91,7 @@ Pdef(\pat1, PmonoArtic(\avsynth,
 Pdef(\pat1, PmonoArtic(\avsynth,
     \freq, Pseq([Pseq([Pseq([100, 300, 400], 2), 1200], 3), 600, 700, 800, 500, 400, 300], inf),  //nested nested patterns
     \dur, 0.125,
-    \legato, Pseq([Pseq([0.1], 8), 0.5, 0.6, 0.7, 0.8, 0.9, 1], inf),  //8 repeasts instead of inf
+    \legato, Pseq([Pseq([0.1], 8), 0.5, 0.6, 0.7, 0.8, 0.9, 1], inf),  //8 repeats instead of inf
 )).play;
 )
 
@@ -261,8 +261,8 @@ Pdef(\pat1, PmonoArtic(\avsynth,
     \legato, Pseq([1, 0.1, 0.1], inf),
     \atk, Pseq([0, 0, 0.1], inf),
     \rel, Pstutter(8, Pseq([0.5, 0.1], inf)),
-    \mod, 10,  //added modulator scaling
-    \filtAmt, Pseq([Pseq([200], 6), 1000], inf),  //added filter parameter
+    \mod, 10,
+    \filtAmt, Pseq([Pseq([200], 6), 1000], inf),
 )).play;
 )
 

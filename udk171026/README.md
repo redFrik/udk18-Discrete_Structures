@@ -28,7 +28,9 @@ first a brief overview...
  - `a= PmonoArtic(\mysound, \freq, Pseq([400, 500, 600, 700], inf), \amp, 0.2).play;` - or key, pattern pairs
  - `a.stop;`
 
-these key, value paris can either be controlling the PmonoArtic or the SynthDef. it is difficult in the beginning to discern between which keys belong to which. below `legato` and `dur` are for PmonoArtic while the rest will control the synth.
+to avoid the need for variables (`a= ` above) we can put the PmonoArtic inside a Pdef like this: `Pdef(\mydef, PmonoActic(\mysound, \freq, 400)).play;`. a Pdef also provide other features like quantisation (`quant`) and crossfade (`fadeTime`).
+
+note: these key, value paris can either be controlling the PmonoArtic or the SynthDef. it is difficult in the beginning to discern between which keys belong to which. below `legato` and `dur` are for PmonoArtic while the rest will control the synth.
 
 ```supercollider
 s.boot;
