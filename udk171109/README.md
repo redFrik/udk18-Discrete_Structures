@@ -14,9 +14,9 @@ http://www.memo.tv/simple-harmonic-motion-12-for-16-percussionists-at-rncm/
 supercollider
 ==
 
-first open and run the code in [whitney.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171109/whitney.scd)
+first open and run the code in [whitney.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171109/whitney.scd?raw=true)
 
-and then [whitney2.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171109/whitney2.scd)
+and then [whitney2.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171109/whitney2.scd?raw=true)
 
 ```supercollider
 s.boot;
