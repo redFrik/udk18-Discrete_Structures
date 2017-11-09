@@ -37,32 +37,33 @@ SynthDef(\avball, {|out= 0, freq= 500, atk= 0.001, rel= 0.3, amp= 0.1, gate= 1, 
 //--warmup
 (
 Pdef(\ball1, PmonoArtic(\avball,
-    \freq, 400,
+    \freq, 400,  //change this
     \legato, 0.1,
+    \dur, 1,  //and this
     \amp, 0.5,
 )).play;
 )
 
 (
 Pdef(\ball1, PmonoArtic(\avball,
-    \freq, 400,
+    \freq, 400,  //first ball at 400hz
     \legato, 0.1,
-    \dur, 0.25,
+    \dur, 0.25,  //duration 0.25
     \amp, 0.5,
 )).play;
 Pdef(\ball2, PmonoArtic(\avball,
-    \freq, 500,
+    \freq, 500,  //second ball at 500hz
     \legato, 0.1,
-    \dur, 0.5,
+    \dur, 0.5,  //with double duration
     \amp, 0.5,
 )).play;
 Pdef(\ball3, PmonoArtic(\avball,
-    \freq, 600,
+    \freq, 600,  //third ball at 600hz
     \legato, 0.1,
-    \dur, 0.75,
+    \dur, 0.75,  //three times the duration of ball1
     \amp, 0.5,
 )).play;
-))
+)
 
 (
 Pdef(\ball1, PmonoArtic(\avball,
@@ -112,8 +113,8 @@ Pdef.all.do{|x| x.clear};
 12.do{|i|
     Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
         \freq, 300+(100*i),
-        \dur, 1+(i+1*0.5)*Pseq([0.5, 0.25], inf),  //added pattern for duration
-        \sustain, 0.2,  //sustain instead of legato to have note duration independent of \dur
+        \dur, i+1*0.25,
+        \sustain, 0.1,  //sustain instead of legato to have note duration independent of \dur
         \amp, 0.1,
         \pan, i.linlin(0, 11, -0.9, 0.9),  //added panning
     )).play;
@@ -126,7 +127,7 @@ Pdef.all.do{|x| x.clear};
     Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
         //\freq, 500+(100*i),
         \degree, i,  //note scale degree here instead of freq
-        \dur, (i+1*0.5),
+        \dur, i+1*0.25,
         \dir, 1,
         \sustain, 0.1,
         \amp, 0.1,
@@ -141,7 +142,7 @@ Pdef.all.do{|x| x.clear};
     Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
         \degree, i,
         \scale, Scale.minor,  //added scale
-        \dur, 1+(i+1*0.5)*Pseq([0.5, 0.25], inf),
+        \dur, 1+(i+1*0.5)*Pseq([0.5, 0.25], inf),  //added pattern for dur
         \sustain, 0.1,
         \amp, 0.1,
         \pan, i.linlin(0, 11, -0.9, 0.9)
@@ -157,7 +158,7 @@ Pdef.all.do{|x| x.clear};
         \scale, Scale.minor,
         \dur, 1+(i+1*0.5)*Pseq([0.5, 0.25], inf),
         \mod, Pseq([0, 0, 0, 1], inf),  //modulation - see synthdef above
-        \sustain, Pseq([0.1, 0.1, 1], inf),
+        \sustain, Pseq([0.1, 0.1, 1], inf),  //added pattern for sustain
         \amp, 0.1,
         \pan, i.linlin(0, 11, -0.9, 0.9)
     )).play;
@@ -171,14 +172,15 @@ Pdef.all.do{|x| x.clear};
         \degree, i,
         \scale, Scale.major,
         \dur, 0.5+(i+1*0.5)*Pseq([0.5, 0.25], inf),
-        \mod, 5,
-        \sustain, 0.01,
+        \mod, 5,  //static modulation - try changing to something higher or a pattern like Pseq([60, 0, 0], inf)
+        \sustain, 0.01,  //shorter sustain
         \amp, 0.1,
         \pan, i.linlin(0, 11, -0.9, 0.9)
     )).play;
 };
 )
 
+//something different
 (
 Pdef.all.do{|x| x.clear};
 7.do{|i|
