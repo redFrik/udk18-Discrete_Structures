@@ -39,3 +39,4 @@ win.front;
 ~spread= 30
 ~num= 10
 ~radius= 15
+~spread= 8

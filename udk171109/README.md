@@ -18,11 +18,14 @@ first open and run the code in [whitney.scd](https://github.com/redFrik/udk18-Di
 
 and then [whitney2.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171109/whitney2.scd?raw=true)
 
+after trying them out copy and paste the code below into a new supercollider document.
+
 ```supercollider
 s.boot;
 s.meter;
 s.scope;
 
+//--load a sound
 (
 SynthDef(\avball, {|out= 0, freq= 500, atk= 0.001, rel= 0.3, amp= 0.1, gate= 1, pan= 0, dir= 1, rate= 5, mod= 0|
     var env= EnvGen.ar(Env.adsr(atk, atk, 0.5, rel), gate, doneAction:2);
@@ -31,10 +34,7 @@ SynthDef(\avball, {|out= 0, freq= 500, atk= 0.001, rel= 0.3, amp= 0.1, gate= 1, 
 }).add;
 )
 
-
-
-//warmup
-
+//--warmup
 (
 Pdef(\ball1, PmonoArtic(\avball,
     \freq, 400,
@@ -46,12 +46,23 @@ Pdef(\ball1, PmonoArtic(\avball,
 (
 Pdef(\ball1, PmonoArtic(\avball,
     \freq, 400,
-    \rate, 10,
-    \dir, 2,
     \legato, 0.1,
+    \dur, 0.25,
     \amp, 0.5,
 )).play;
-)
+Pdef(\ball2, PmonoArtic(\avball,
+    \freq, 500,
+    \legato, 0.1,
+    \dur, 0.5,
+    \amp, 0.5,
+)).play;
+Pdef(\ball3, PmonoArtic(\avball,
+    \freq, 600,
+    \legato, 0.1,
+    \dur, 0.75,
+    \amp, 0.5,
+)).play;
+))
 
 (
 Pdef(\ball1, PmonoArtic(\avball,
@@ -62,18 +73,33 @@ Pdef(\ball1, PmonoArtic(\avball,
     \legato, 0.1,
     \amp, 0.5,
 )).play;
+Pdef(\ball2, PmonoArtic(\avball,
+    \freq, Pseq([500, 400, 300, 200], inf)*1.25,
+    \dir, Pseq([0.5, 1, 2, 3], inf),
+    \rate, Pstutter(4, Pseq([1, 2, 3, 14], inf)),
+    \dur, 0.3,
+    \legato, 0.1,
+    \amp, 0.5,
+)).play;
+Pdef(\ball3, PmonoArtic(\avball,
+    \freq, Pseq([500, 400, 300, 200], inf)*1.5,
+    \dir, Pseq([0.5, 1, 2, 3], inf),
+    \rate, Pstutter(4, Pseq([1, 2, 3, 14], inf)),
+    \dur, 0.4,
+    \legato, 0.1,
+    \amp, 0.5,
+)).play;
 )
 
-Pdef(\ball1).clear
+Pdef.all.do{|x| x.clear};
 
 //--whitney
-
 (
 Pdef.all.do{|x| x.clear};
-12.do{|i|
-    Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
-        \freq, 500+(100*i),,
-        \dur, i+1*0.25,
+12.do{|i|  //do something 12 times
+    Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,  //create ball0, ball1 ball2 etc
+        \freq, 500+(100*i),  //assing frequencies 500, 600, 700 etc
+        \dur, i+1*0.25,  //assign durations 0.25, 0.5, 0.75 etc
         \dir, 1,
         \legato, 0.1,
         \amp, 0.1,
@@ -85,12 +111,11 @@ Pdef.all.do{|x| x.clear};
 Pdef.all.do{|x| x.clear};
 12.do{|i|
     Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
-        //\freq, 500+(100*i),
-        \degree, i+5,  //note scale degree here instead of freq
-        \dur, 1+(i+1*0.5),
-        \dir, 1,
-        \sustain, 0.1,
+        \freq, 300+(100*i),
+        \dur, 1+(i+1*0.5)*Pseq([0.5, 0.25], inf),  //added pattern for duration
+        \sustain, 0.2,  //sustain instead of legato to have note duration independent of \dur
         \amp, 0.1,
+        \pan, i.linlin(0, 11, -0.9, 0.9),  //added panning
     )).play;
 };
 )
@@ -99,11 +124,13 @@ Pdef.all.do{|x| x.clear};
 Pdef.all.do{|x| x.clear};
 12.do{|i|
     Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
-        \freq, 300+(100*i),
-        \dur, 1+(i+1*0.5)*Pseq([0.5, 0.25], inf),
-        \sustain, 0.2,
+        //\freq, 500+(100*i),
+        \degree, i,  //note scale degree here instead of freq
+        \dur, (i+1*0.5),
+        \dir, 1,
+        \sustain, 0.1,
         \amp, 0.1,
-        \pan, i.linlin(0, 11, -0.9, 0.9)
+        \pan, i.linlin(0, 11, -0.9, 0.9),
     )).play;
 };
 )
@@ -115,8 +142,7 @@ Pdef.all.do{|x| x.clear};
         \degree, i,
         \scale, Scale.minor,  //added scale
         \dur, 1+(i+1*0.5)*Pseq([0.5, 0.25], inf),
-        \mod, Pseq([0, 0, 0, 1], inf),
-        \sustain, Pseq([0.1, 0.1, 1], inf),
+        \sustain, 0.1,
         \amp, 0.1,
         \pan, i.linlin(0, 11, -0.9, 0.9)
     )).play;
@@ -129,6 +155,21 @@ Pdef.all.do{|x| x.clear};
     Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
         \degree, i,
         \scale, Scale.minor,
+        \dur, 1+(i+1*0.5)*Pseq([0.5, 0.25], inf),
+        \mod, Pseq([0, 0, 0, 1], inf),  //modulation - see synthdef above
+        \sustain, Pseq([0.1, 0.1, 1], inf),
+        \amp, 0.1,
+        \pan, i.linlin(0, 11, -0.9, 0.9)
+    )).play;
+};
+)
+
+(
+Pdef.all.do{|x| x.clear};
+10.do{|i|
+    Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
+        \degree, i,
+        \scale, Scale.major,
         \dur, 0.5+(i+1*0.5)*Pseq([0.5, 0.25], inf),
         \mod, 5,
         \sustain, 0.01,
@@ -138,6 +179,23 @@ Pdef.all.do{|x| x.clear};
 };
 )
 
+(
+Pdef.all.do{|x| x.clear};
+7.do{|i|
+    Pdef(("ball"++i).asSymbol, PmonoArtic(\avball,
+        \degree, i,
+        \scale, Scale.minor,
+        \dur, 0.5+(i+1*0.5)*2,  //*2 to make everything slower
+        \atk, 5,  //long attack time
+        \rel, 5,  //long release time
+        \dir, 0.99,  //always falling a little bit
+        \rate, 1,  //how fast to fall
+        \sustain, 0.05,  //note duration
+        \amp, 0.4,
+        \pan, i.linlin(0, 11, -0.9, 0.9)
+    )).play;
+};
+)
 
 //some different sounds to try
 (
@@ -164,7 +222,6 @@ SynthDef(\avball, {|out= 0, freq= 500, atk= 0.001, rel= 0.3, amp= 0.1, gate= 1, 
 }).add;
 )
 ```
-
 
 - - -
 
@@ -236,7 +293,7 @@ now let us modify the scipt a little bit and create many objects.
 * copy and paste in the code here below replacing what was there before
 * study the differences (bascially added two for loops and two variables)
 
-```
+```cs
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -349,18 +406,14 @@ public class Whitney3D : MonoBehaviour {
 * save and switch back to unity
 * in the upper left hierachy window, click to select the 'Main Camera'
 * attach the script to the camera by selecting Component / Scripts / Whitney3D
-* create a new sphere by selecting GameObject / 3D Object / Cube. this game object will become our prefab from which the clone will be made
+* create a new cube by selecting GameObject / 3D Object / Cube. this game object will become our prefab from which the clone will be made
 * again select the main camera and in the inspector click on the little circle next to prefab. select the Cube by doubleclicking in the dialog that pops up
-* optionally create a light by selecting GameObject / Light / Directional Light
 * press play and you should see one rotating cube (the clone) around another (the prefab)
-* change the variables
-
-things to try...
-
-* try copying the modifications we did in the 2d example above (the two lines that update the x and y positions)
-* try adding more objects and zoom out main camera (z more negative).
-* change clear flags on main camera to 'Depth only' and play with the light
-* add an oscillator for the third dimension by making the lines in the update for loop look like this...
+* change the variables. things to try...
+  * try copying the modifications we did in the 2d example above (the two lines that update the x and y positions)
+  * try adding more objects and zoom out main camera (z more negative).
+  * change clear flags on main camera to 'Depth only' and play with the light
+  * add an oscillator for the third dimension by making the lines in the update for loop look like this...
 
 ```cs
 ct.localPosition= new Vector3(
