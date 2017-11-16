@@ -230,7 +230,7 @@ SynthDef(\avball, {|out= 0, freq= 500, atk= 0.001, rel= 0.3, amp= 0.1, gate= 1, 
 unity3d
 ==
 
-first we create a simple 2d scene with a single spjere rotating around.
+first we create a simple 2d scene with a single sphere rotating around.
 
 * start unity and create a new **2D** project. give it a name (here whitney2d)
 * create a new script by selecting Assets / Create / C# Script
