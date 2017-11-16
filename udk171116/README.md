@@ -376,17 +376,17 @@ Pdef(\bd, PmonoArtic(\avbd,
     \dur, 1,
     \legato, 0.1,
     \amp, 0.5
-    )).play;
-    Pdef(\hh).quant= 4;
-    Pdef(\hh, PmonoArtic(\avhh,
+)).play;
+Pdef(\hh).quant= 4;
+Pdef(\hh, PmonoArtic(\avhh,
     \mod, Pseq([0, 0, 9, 0], inf),
     \dur, 0.25,
     \legato, Pseg(Pseq([0.05, 0.2, 0.05], inf), 32).trace,
     \amp, 0.1,
     \pan, Pseq([0.5, 0, -0.5, 0], inf),
-    )).play;
-    Pdef(\bass).quant= 4;
-    Pdef(\bass, PmonoArtic(\avbass,
+)).play;
+Pdef(\bass).quant= 4;
+Pdef(\bass, PmonoArtic(\avbass,
     \freq, 50,
     \amp, 0.3,
     \mod, Pseq([0, 0, 0, 0, 0, 0, 0, 1], inf),
@@ -553,9 +553,109 @@ Pdef(\arp2).play;
 unity3d
 ==
 
-playing with render textures and feedback...
+playing with render textures and feedback.
 
+note: this will also work in 2D but to get better results create a light by selecting GameObject / Light / Directional Light
 
+* start unity and create a new **3D** project. give it a name (here mirror)
+* create a new script by selecting Assets / Create / C# Script
+* give the script the name 'SomeObjects' by typing under the white icon
+* double click the white C# script icon to open it in MonoDevelop
+* copy and paste in the code here below replacing what was there originally
+
+```cs
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+
+public class SomeObjects : MonoBehaviour {
+    public Transform prefab;    //holds our initial gameobject
+    List<Transform> clones = new List<Transform>();
+    int num= 30;  //set number of clones
+    public float rotation1Speed;
+    public float rotation2Speed;
+    public float rotation3Speed;
+    public float spread;
+    void Start() {  //do once when starting
+        rotation1Speed= -0.002F;
+        rotation2Speed = 0.01F;
+        rotation3Speed = 0.003F;
+        spread = 0.15F;
+        for (int i = 0; i < num; i++) {
+            clones.Add (Instantiate (prefab, new Vector3 (0, 0, 0), Quaternion.identity));
+        }
+        prefab.gameObject.SetActive(false);  //hide prefab object
+    }
+    void Update() {  //do every frame - many times per second
+        int i= 1;    //keep track of clone index
+        foreach(Transform ct in clones) {
+            ct.localPosition= new Vector3(
+                Mathf.Sin (Time.frameCount*rotation1Speed*i+(Mathf.PI*0.5F))+(Mathf.Sin(Time.frameCount*rotation2Speed)*(spread*i)),
+                Mathf.Cos (Time.frameCount*rotation1Speed*i+(Mathf.PI*0.5F))-(Mathf.Cos(Time.frameCount*rotation2Speed)*(spread*i)),
+                Mathf.Sin (Time.frameCount*rotation3Speed*i+(Mathf.PI*0.5F))+(Mathf.Cos(Time.frameCount*rotation2Speed)*(spread*i))
+            );
+            ct.localEulerAngles = new Vector3 (
+                Mathf.Sin (Time.frameCount * rotation1Speed * i) * 100.0F,
+                Mathf.Cos (Time.frameCount * rotation1Speed * i) * 100.0F,
+                1
+            );
+            i++;
+        }
+    }
+}
+```
+
+* save and switch back to unity
+* in the upper left hierachy window, click to select the 'Main Camera'
+* attach the script to the camera by selecting Component / Scripts / SomeObjects (or just drag and drop the script onto the camera)
+* create a new object (here a sphere but any will do) by selecting GameObject / 3D Object / Sphere. this game object will become our prefab from which the clone will be made
+* again select the main camera and in the inspector click on the little circle next to prefab. select the Sphere by doubleclicking in the dialog that pops up (or just drag the sphere onto the prefab variable slot)
+* press play and you should see a cluster of rotating spheres
+
+![00cluster](00cluster.png?raw=true "00cluster")
+
+* play around with the variables (rotationspeeds and spread) to get a feeling for how the system behaves
+* now stop and create a plane by selecting GameObject / 3D Object / Plane. this will be our feedback screen.
+* set its X rotation under Inspector / Transform to -90
+
+![01rotation](01rotation.png?raw=true "01rotation")
+
+* select Assets / Create / Render Texture
+* call it something (here 'feedback')
+* drag and drop the texture onto the plane
+* select GameObject / Camera to create a new camera
+* click the little round icon next to the new camera's Target Texture and select feedback
+* your scene should now look like this...
+
+![02feedback](02feedback.png?raw=true "02feedback")
+
+* press play and try it
+* stop and do a few adjustments to center the plane
+* select the Main Camera in the upper left hierachy window
+* set its Position to 0, 0, -5
+* select the Plane in the upper left hierachy window
+* set its Scale to 1, 1, -1
+* select the Camera (the new one we created) in the upper left hierachy window
+* set its Position to 0, 0, -10
+* you should now see something like this when you press play...
+
+![03mirror](03mirror.png?raw=true "03mirror")
+
+experiment. things to try:
+
+* change light type and colour
+* set 'No Shadows' in the light
+* try 'Orthographic' projection and different clear flags for the cameras
+* click on the feedback texture (in the assets window near the bottom of the screen) and change things. size 512 will give higher resolution for the feedback. also try very low resolutions, change anti-aliasing, and colour format
+* change from Sphere to Cubes (or other imported prefabs)
+
+the last trick will be to apply the feedback texture to all the objects.
+
+* stop
+* drag and drop the feedback texture from assets window to the Sphere (or whatever object you use as a prefab) in the upper left hierachy window
+* you should get some strange results like this...
+
+![04mirrors](04mirrors.png?raw=true "04mirrors")
 
 - - -
 
