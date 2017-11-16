@@ -484,7 +484,6 @@ Pdef(\arp1).stop;
 Pdef(\arp3).stop;
 Pdef(\swop).stop;
 ```
-- - -
 
 things to explore:
 
@@ -619,7 +618,10 @@ Pdef(\bdmidi, Pbind(
 //etc.
 
 Pdef(\bdmidi).stop;
+Pdef(\bd).stop;
 ```
+
+- - -
 
 unity3d
 ==
