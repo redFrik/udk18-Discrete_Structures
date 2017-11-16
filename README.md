@@ -14,8 +14,8 @@ dates
 - [x] [26oct 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171026): pattern phasing
 - [ ] 02nov: **NO CLASS** (i'm away)
 - [x] [09nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171109): whitney
-- [ ] [16nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171116): techno and mirrors
-- [ ] 23nov 14-16
+- [x] [16nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171116): techno and mirrors
+- [ ] 23nov 14-16: euclidean rhythms and ?
 - [ ] 30nov 14-16
 - [ ] 07dec 14-16
 - [ ] 14dec 14-16

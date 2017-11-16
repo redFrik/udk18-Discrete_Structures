@@ -550,6 +550,77 @@ Pdef(\arp2).play;
 )
 ```
 
+bonus
+--
+
+one question that came up was how to send out midi or use the patterns together with hardware or software synths.
+
+```supercollider
+s.boot;
+
+(  //same as before
+SynthDef(\avbd, {|out= 0, amp= 0.1, freq= 60, pan= 0, atk= 0.001, rel= 0.1, mod= 0, cur= 0, gate= 1|
+    var env= EnvGen.ar(Env.asr(atk, 1, rel, cur), gate, doneAction:2);
+    var src= SinOsc.ar(freq*(2-env.lag3), 0.5pi, mod+1).tanh*amp;
+    OffsetOut.ar(out, Pan2.ar(src*env, pan));
+}).add;
+)
+
+TempoClock.tempo= 117/60;
+
+(  //also same like before
+Pdef(\bd).quant= 4;
+Pdef(\bd, PmonoArtic(\avbd,
+    \freq, 50,
+    \dur, 1,
+    \legato, 0.1,
+    \amp, 0.5,
+)).play;
+)
+
+//--midi setup
+//either connect hardware midiinterface or open up a midi capable program like garageband
+//then run these two lines once...
+MIDIClient.init;
+m= MIDIOut.newByName("IAC-drivrutin", "Buss 1").latency_(Server.default.latency);
+//the name "IAC-drivrutin" and "Buss 1" is selecting which midi device to use and will be different for your setup
+//for osx: if you don't see the inter-application-communication (IAC) device you can activate it in your Audio/Midi-Setup program (in your utilities program folder)
+
+(
+Pdef(\bdmidi).quant= 4;
+Pdef(\bdmidi, Pbind(  //note: we need to use Pbind instead of PmonoArtic
+    \type, \midi,
+    \midicmd, \noteOn,
+    \midiout, m,  //the MIDIOut we created above
+    \chan, 0,  //shows up as chan 1 in other software
+    \midinote, 50,  //note: midinote instead of \freq. you can still use freq
+    \dur, 1,
+    \legato, 0.1,
+    //\timingOffset, 0.2,  //might need to tune timing to sync
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\bdmidi).quant= 4;
+Pdef(\bdmidi, Pbind(
+    \type, \midi,
+    \midicmd, \noteOn,
+    \midiout, m,
+    \chan, 0,
+    \midinote, Pseq([50, 60, 55, 56], inf),  //patterns work of course
+    \dur, 0.5,
+    \legato, 0.3,
+    //\timingOffset, 0.2,  //might need to tune timing to sync
+    \amp, 0.75,
+)).play;
+)
+
+//etc.
+
+Pdef(\bdmidi).stop;
+```
+
 unity3d
 ==
 
