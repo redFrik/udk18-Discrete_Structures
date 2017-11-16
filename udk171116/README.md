@@ -555,7 +555,7 @@ unity3d
 
 playing with render textures and feedback.
 
-note: this will also work in 2D but to get better results create a light by selecting GameObject / Light / Directional Light
+note: this will also work really well in 2D but to get good results add a light by selecting GameObject / Light / Directional Light
 
 * start unity and create a new **3D** project. give it a name (here mirror)
 * create a new script by selecting Assets / Create / C# Script
@@ -643,13 +643,16 @@ public class SomeObjects : MonoBehaviour {
 
 experiment. things to try:
 
+* positions, scaling, rotation for (new) camera and plane
 * change light type and colour
 * set 'No Shadows' in the light
+* change the code in the script
 * try 'Orthographic' projection and different clear flags for the cameras
 * click on the feedback texture (in the assets window near the bottom of the screen) and change things. size 512 will give higher resolution for the feedback. also try very low resolutions, change anti-aliasing, and colour format
 * change from Sphere to Cubes (or other imported prefabs)
+* try adding more planes also with the feedback texture. can you build a hall of mirrors?
 
-the last trick will be to apply the feedback texture to all the objects.
+the last trick will be to apply the feedback texture to all the objects!
 
 * stop
 * drag and drop the feedback texture from assets window to the Sphere (or whatever object you use as a prefab) in the upper left hierachy window
