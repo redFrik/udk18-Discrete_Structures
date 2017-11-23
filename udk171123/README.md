@@ -1,6 +1,5 @@
-euclidean rhythms and ?
+euclidean rhythms and text
 --------------------
-
 
 supercollider
 ==
@@ -380,12 +379,117 @@ Pdef(\play0, PmonoArtic(\avplay,
 Pdef(\play0).stop;  //should stop eventually
 ```
 
+also try adapting some examples from [last week](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171116#supercollider) to use Pbjorklund.
+
 - - -
 
 unity3d
 ==
 
-todo
+note: this will also work really well in 2D but to get good results add a light by selecting GameObject / Light / Directional Light
+
+* start unity and create a new **3D** project. give it a name (here text)
+* create a new script by selecting Assets / Create / C# Script
+* give the script the name 'Text' by typing under the white icon
+* double click the white C# script icon to open it in MonoDevelop
+* copy and paste in the code here below replacing what was there originally
+
+```cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Text : MonoBehaviour {
+    public Transform prefab;    //holds our initial gameobject
+    List<Transform> clones = new List<Transform> ();
+    int num = 30;    //set number of clones
+    void Start () {  //do once when starting
+        for (int i = 0; i < num; i++) {
+            clones.Add (Instantiate (prefab, new Vector3 (0, 0, 0), Quaternion.identity));
+        }
+        prefab.gameObject.SetActive (false);  //hide prefab object
+    }
+
+    void Update () {  //do every frame - many times per second
+        int i = 1;    //keep track of clone index
+
+        //variant 1 - turn around in a circle
+        foreach(Transform ct in clones) {
+            ct.localEulerAngles = new Vector3 (0, 0, i*1.0F/num*360.0F);
+            i++;
+        }
+
+        //variant 2 - scale up
+        //        foreach(Transform ct in clones) {
+        //            ct.localScale = new Vector3 (1+i, 1+i, 1);
+        //            i++;
+        //        }
+
+        //variant 3 - positioning
+        //        foreach(Transform ct in clones) {
+        //            ct.localPosition = new Vector3 (i, i%3, 1);  //try different values here
+        //            i++;
+        //        }
+
+        //variant 4 - more positioning
+        //        foreach(Transform ct in clones) {
+        //            ct.localPosition = new Vector3 (i%7*1.5F, i%9*0.4F, 1);
+        //            i++;
+        //        }
+
+        //variant 5 - animation position
+        //        foreach (Transform ct in clones) {
+        //            ct.localPosition = new Vector3 ((i % (Time.frameCount*0.01F%5) * 8.0F)-18, i % (Time.frameCount+(i*0.1F)%12) * 0.2F, 1);
+        //            i++;
+        //        }
+
+        //variant 6 - animation scaling
+        //        foreach (Transform ct in clones) {
+        //            ct.localScale = new Vector3 ((Time.frameCount+(i*10))*0.01F%5, i % (Time.frameCount+(i*0.3F)%8)*0.25F, 1);
+        //            i++;
+        //        }
+
+        //variant 7 - animation rotation
+        //        foreach (Transform ct in clones) {
+        //            ct.localEulerAngles = new Vector3 (0, 0, (Time.frameCount+(i*0.9F))*0.01F*360.0F);
+        //            i++;
+        //        }
+
+        //variant 7 - more animation rotation
+        //        foreach (Transform ct in clones) {
+        //            ct.localEulerAngles = new Vector3 (0, 0, (Time.frameCount*(i*-0.0001F))*360.0F);
+        //            i++;
+        //        }
+
+        //now combine form above and change some values
+        //        foreach (Transform ct in clones) {
+        //            ct.localScale = new Vector3 ((Time.frameCount+(i*10))*0.01F%5, i % (Time.frameCount+(i*0.3F)%8)*0.25F, 1);
+        //            ct.localEulerAngles = new Vector3 (0, 0, (Time.frameCount*(i*-0.0001F))*360.0F);
+        //            i++;
+        //        }
+    }
+}
+```
+
+* save and switch back to unity
+* in the upper left hierachy window, click to select the 'Main Camera'
+* attach the script to the camera by selecting Component / Scripts / Text (or just drag and drop the script onto the camera)
+* select GameObject / 3D Object / 3D Text. this game object will become our prefab from which the clone will be made
+* edit the 3D Text object in its inspector and set the text to something (here 'Euclidean').
+* also set Anchor to 'Middle center'
+
+![00anchor](00anchor.png?raw=true "00anchor")
+
+* select the main camera and in the inspector click on the little circle next to prefab. select the New Text by doubleclicking in the dialog that pops up (or just drag the sphere onto the prefab variable slot)
+* press play and you should see a circle of words
+
+![01circle](01circle.png?raw=true "01circle")
+
+now play around with the code. change things and try the different variants by commenting/uncommenting out different blocks of code.
+
+also change the background, text, colours etc.
+
+![02animation](02animation.png?raw=true "02animation")
 
 links
 ==
