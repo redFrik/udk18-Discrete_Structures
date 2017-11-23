@@ -1,4 +1,4 @@
-euclidean rhythms and text
+euclidean rhythms and 3d text
 --------------------
 
 supercollider
@@ -8,6 +8,9 @@ first install a quark by typing this inside supercollider...
 
 ```supercollider
 Quarks.install("Bjorklund");
+
+//or if that does not work try:
+Quarks.install("https://github.com/supercollider-quarks/Bjorklund.git");
 ```
 
 and then restart supercollider (or just recompile the class library).
@@ -479,6 +482,17 @@ public class Text : MonoBehaviour {
         //      for (int j = 0; j < num; j++) {
         //          RotateText(clones[j], 1);
         //      }
+        
+        //special - colour each text object
+        //        for (int j = 0; j < num; j++) {
+        //            clones[j].GetComponent<TextMesh>().color= new Color(0.0F, j*1.0F/num, 0.0F);  //variants
+        //            //clones[j].GetComponent<TextMesh>().color= Color.HSVToRGB (j * 1.0F / num, 1.0F, 1.0F);
+        //            //clones[j].GetComponent<TextMesh>().color= Color.HSVToRGB (1.0F, j * 1.0F / num, 1.0F);
+        //            //clones[j].GetComponent<TextMesh>().color= Color.HSVToRGB (((Time.frameCount+j)*0.05F)%1.0F, 1.0F, 1.0F);  //animation
+        //            //clones[j].GetComponent<TextMesh>().color= Color.HSVToRGB (Mathf.Sin(Time.frameCount*0.3F+(j*6.1F))%1, Mathf.Sin(Time.frameCount*0.1F+(j*10.01F))%1, 1.0F);
+        //            //clones[j].GetComponent<TextMesh>().color= Color.HSVToRGB (Mathf.Sin(Time.frameCount*0.1F+(j*6.1F))%1, Mathf.Sin(Time.frameCount*0.1F+(j*10.01F))%1, Mathf.Sin((Time.frameCount*0.02F)+(j*0.4F))*0.5F+0.5F);
+        //        }
+
     }
 }
 ```
