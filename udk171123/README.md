@@ -386,7 +386,7 @@ also try adapting some examples from [last week](https://github.com/redFrik/udk1
 unity3d
 ==
 
-note: this will also work really well in 2D but to get good results add a light by selecting GameObject / Light / Directional Light
+note: this will also work really well in 2D.
 
 * start unity and create a new **3D** project. give it a name (here text)
 * create a new script by selecting Assets / Create / C# Script
@@ -409,7 +409,14 @@ public class Text : MonoBehaviour {
         }
         prefab.gameObject.SetActive (false);  //hide prefab object
     }
-
+    void RotateText(Transform clone, int shift) {
+        string instr = clone.GetComponent<TextMesh>().text;
+        string outstr = "";
+        for (int j = 0; j < instr.Length; j++) {
+            outstr = outstr + (instr [(j + shift) % instr.Length]);
+        }
+        clone.GetComponent<TextMesh>().text = outstr;
+    }
     void Update () {  //do every frame - many times per second
         int i = 1;    //keep track of clone index
 
@@ -421,13 +428,13 @@ public class Text : MonoBehaviour {
 
         //variant 2 - scale up
         //        foreach(Transform ct in clones) {
-        //            ct.localScale = new Vector3 (1+i, 1+i, 1);
+        //            ct.localScale = new Vector3 (i*0.25F, i*0.25F, 1);
         //            i++;
         //        }
 
         //variant 3 - positioning
         //        foreach(Transform ct in clones) {
-        //            ct.localPosition = new Vector3 (i, i%3, 1);  //try different values here
+        //            ct.localPosition = new Vector3 (i, i%3, 1);
         //            i++;
         //        }
 
@@ -467,6 +474,11 @@ public class Text : MonoBehaviour {
         //            ct.localEulerAngles = new Vector3 (0, 0, (Time.frameCount*(i*-0.0001F))*360.0F);
         //            i++;
         //        }
+        
+        //special - string reordering - can also go in Start to do it once
+        //      for (int j = 0; j < num; j++) {
+        //          RotateText(clones[j], 1);
+        //      }
     }
 }
 ```
@@ -485,7 +497,7 @@ public class Text : MonoBehaviour {
 
 ![01circle](01circle.png?raw=true "01circle")
 
-now play around with the code. change things and try the different variants by commenting/uncommenting out different blocks of code.
+now play around with the code. change things and try the different variants by commenting/uncommenting out different blocks of code. try changing the number of clones created.
 
 also change the background, text, colours etc.
 
