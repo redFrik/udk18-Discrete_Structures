@@ -334,15 +334,15 @@ Pdef(\loop).stop;
 //drum kit with single buffers
 (
 ~kick.free;
-~kick= Buffer.read(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/BassDrum/KickDrum0004.aif");
+~kick= Buffer.readChannel(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/BassDrum/KickDrum0004.aif", channels:[0]);
 ~snare.free;
-~snare= Buffer.read(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/SnareDrum/SnareDrum0004.aif");
+~snare= Buffer.readChannel(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/SnareDrum/SnareDrum0004.aif", channels:[0]);
 ~hihat.free;
-~hihat= Buffer.read(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/Cls'd Hihat/Closed Hihat0004.aif");
+~hihat= Buffer.readChannel(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/Cls'd Hihat/Closed Hihat0004.aif", channels:[0]);
 ~hihatopen.free;
-~hihatopen= Buffer.read(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/Open Hihat/Open Hihat0004.aif");
+~hihatopen= Buffer.readChannel(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/Open Hihat/Open Hihat0004.aif", channels:[0]);
 ~clap.free;
-~clap= Buffer.read(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/Misc/Clap.aif");
+~clap= Buffer.readChannel(s, "/Users/asdf/Desktop/Roland TR-808 Normalised/Misc/Clap.aif", channels:[0]);
 )
 
 //--set yet another tempo
@@ -394,7 +394,7 @@ Pdef(\clap, PmonoArtic(\avsamp,
     \dur, 0.25,
     \rate, Pseq([1, 1, 1, 1.25], inf),
     \offset, Pseq([0, 0.01], inf),
-    \amp, Pbjorklund(7, 16)*0.2,
+    \amp, Pbjorklund(7, 16)*0.2,  //Pbjorklund is from a quark we installed last week
 )).play;
 )
 
@@ -462,12 +462,41 @@ Pdef(\kick).stop;
 Pdef(\hihat).stop;
 Pdef(\snare).stop;
 Pdef(\clap).stop;
+
+//and again you can record from microphone and replace what is there...
+Synth(\avrec, [\buf, ~kick]);
+Synth(\avrec, [\buf, ~snare]);
+Synth(\avrec, [\buf, ~hihat]);
+Synth(\avrec, [\buf, ~hihatopen]);
+Synth(\avrec, [\buf, ~clap]);
+//now play the four pdefs again
+```
+
+limiter
+--
+
+often it is wise to use a limiter when experimenting with sounds and patterns in supercollider. this will protect your ears and gear from extremely loud sounds that can happen in some cases (divide by zero, negative frequencies to filters, high amplitudes etc).
+
+```supercollider
+Quarks.install("SafetyNet");
+//then recompile and next time you boot the server you have a permanent limiter.
+
+//so now if you make a mistake and type
+\amp, 100.5,
+//your speakers will not break
+
+//to temporarily disable it do...
+Safety.disable;
+//re-enable...
+Safety.enable
 ```
 
 - - -
 
 unity3d
 ==
+
+NOTE: this will require unity version 5.5 or newer. and if you try it in 2D remember to add a light.
 
 * start unity and create a new 3D project. give it a name (here 'lines').
 * select Assets / Create / Material

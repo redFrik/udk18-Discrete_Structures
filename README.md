@@ -16,7 +16,7 @@ dates
 - [x] [09nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171109): whitney
 - [x] [16nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171116): techno and mirrors
 - [x] [23nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171123): euclidean rhythms and 3d text
-- [ ] [30nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171130): samples and lines
+- [x] [30nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171130): samples and lines
 - [ ] 07dec 14-16
 - [ ] 14dec 14-16
 - [ ] 21dec: **NO CLASS**
