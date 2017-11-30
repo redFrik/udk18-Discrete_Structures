@@ -1,14 +1,13 @@
 samples and lines
 --------------------
 
-
 supercollider
 ==
 
 first we need to find a few soundfiles to use. the examples below expects a mono drumloop sample that is four beats long as well as five single drum sound samples (preferably from a 808 drum machine).
 find your own or download free ones from [here](http://www.users.globalnet.co.uk/%7Espufus/drums.htm) and [here](http://trashaudio.com/2010/01/roland-tr-808-sample-pack).
 
-NOTE: can not be `.mp3`. use `.aiff` or `.wav`
+NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.wav`
 
 ```supercollider
 s.boot;
@@ -470,7 +469,7 @@ Pdef(\clap).stop;
 unity3d
 ==
 
-* start unity and create a new project. give it a name (here 'lines'). it can be either 3D or 2D.
+* start unity and create a new 3D project. give it a name (here 'lines').
 * select Assets / Create / Material
 * give the material a name (can be anything - here 'LineMat') by typing under the icon
 * at the top of the inspector for the material select Shader / Particles / Additive
@@ -481,7 +480,7 @@ unity3d
 
 * select GameObject / Create Empty
 * select Component / Effect / Line Renderer
-* in the GameObject's inspector find Material and flip down / expand it
+* in the GameObject's inspector find Materials and flip down / expand it
 * click on the little circle next to Element 0 and select LineMat by double clicking
 
 ![01linematerial](01linematerial.png?raw=true "01linematerial")
@@ -607,6 +606,8 @@ public class Lines : MonoBehaviour {
 should give you something like...
 
 ![05fivehundred](05fivehundred.png?raw=true "05fivehundred")
+
+now try more materials and adding them to the line renderer (set Materials / Size to for example 4 and then set your new materials under elements 0-3)
 
 links
 ==
