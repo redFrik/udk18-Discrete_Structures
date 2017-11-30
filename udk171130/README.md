@@ -470,7 +470,59 @@ Pdef(\clap).stop;
 unity3d
 ==
 
-todo
+* start unity and create a new project. give it a name (here 'lines'). it can be either 3D or 2D.
+* select Assets / Create / Material
+* give the material a name (can be anything - here 'LineMat') by typing under the icon
+* at the top of the inspector for the material select Shader / Particles / Additive
+* also click on the Particle Texture icon and select 'Default-Particle'
+* your scene should now look like this...
+
+![00material](00material.png?raw=true "00material")
+
+* select GameObject / Create Empty
+* select Component / Effect / Line Renderer
+* in the GameObject's inspector find Material and flip down / expand it
+* click on the little circle next to Element 0 and select LineMat by double clicking
+
+![01linematerial](01linematerial.png?raw=true "01linematerial")
+
+press play and start exploring. change the Positions / Size to for example 5 and then the individual x, y, z, positions below. try the Color and set start and end to different colours. etc.
+
+* create a new script by selecting Assets / Create / C# Script
+* give the script the name 'Lines' by typing under the white icon
+* double click the white C# script icon to open it in MonoDevelop
+* copy and paste in the code here below replacing what was there originally
+
+```cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Lines : MonoBehaviour {
+    int num= 10;
+    LineRenderer line;
+    void Start () {
+        line = GetComponent<LineRenderer> ();
+        line.positionCount = num;
+        line.loop = true;  //optional wrap back to beginning
+    }
+    void Update () {
+        line.startWidth = 0.1F;
+        line.endWidth = 0.1F;
+        for (int i = 0; i < num; i++) {
+            line.SetPosition (i, new Vector3 ((i % 5) * 2 - 1, (i % 6) * 2 - 1, (i % 7) * 2 - 1));
+        }
+    }
+}
+```
+
+* save and switch back to unity
+* attach the script to the empty GameObject by drag&drop, or by menu Component / Scripts / Lines, or by clicking Add Component in inspector (3 ways to do the same thing)
+* press play and you should see this...
+
+![02lines](02lines.png?raw=true "02lines")
+
+experiment with the code. make it animate.
 
 links
 ==
