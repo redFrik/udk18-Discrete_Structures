@@ -49,12 +49,13 @@ Pdef(\loop, PmonoArtic(\avsamp,
 )).play;
 )
 
+//let this run for a while and listen
 (
 Pdef(\loop).quant= 1;
 Pdef(\loop, PmonoArtic(\avsamp,
     \buf, ~loop,
     \dur, 4,
-    \legato, Pseq([0.95, 0.8], inf),  //shorter every other time - this subltre stop makes a huge difference
+    \legato, Pseq([0.95, 0.8], inf),  //shorter every other time - this subtle stop makes a huge difference
     \amp, 0.75,
 )).play;
 )
@@ -129,7 +130,7 @@ Pdef(\loop, PmonoArtic(\avsamp,
 Pdef(\loop).quant= 1;
 Pdef(\loop, PmonoArtic(\avsamp,
     \buf, ~loop,
-    \dur, Pseq([4, 1, 1, 1, Pseq([1/16], 16)], inf),
+    \dur, Pseq([4, 1, 1, 1, Pseq([1/16], 16)], inf),  //here faster. 1/16 instead
     \offset, Pseq([0, 0, 0.25, 0.5, Pseq([0.375], 16)], inf),
     \rate, Pseq([1, 1, 1, 1, Pseq([1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5], 1)], inf),
     \legato, 0.95,
@@ -152,7 +153,7 @@ Pdef(\loop, PmonoArtic(\avsamp,
 )).play;
 )
 
-//or exponential growth instead of linear
+//or exponential growth instead of linear using Pgeom instead of Pseries
 (
 Pdef(\loop).quant= 1;
 Pdef(\loop, PmonoArtic(\avsamp,
@@ -184,6 +185,7 @@ Pdef(\loop, PmonoArtic(\avsamp,
 )).play;
 )
 
+//6/8 feel all of a sudden
 (
 Pdef(\loop).quant= 4;
 Pdef(\loop, PmonoArtic(\avsamp,
@@ -246,14 +248,13 @@ Pdef(\loop, PmonoArtic(\avsamp,
 
 
 //multiple sequencers using the same soundfile loop
-
 (
-TempoClock.tempo= 4/~loop.duration*1.75;
+TempoClock.tempo= 4/~loop.duration*1.8;
 Pdef(\loop).quant= 4;
 Pdef(\loop, PmonoArtic(\avsamp,
     \buf, ~loop,
     \dur, Pseq([4, 4, 2, 2, 1, 1, 1, 1], inf),
-    \rate, Pseq([1, 1, 1, 1, 1, 1, 1, -1]*1.75, inf),  //last backwards
+    \rate, Pseq([1, 1, 1, 1, 1, 1, 1, -1]*1.8, inf),  //last backwards
     \legato, 0.6,
     \amp, 0.75,
 )).play;
@@ -291,9 +292,9 @@ Pdef(\loop4).quant= 4;
 Pdef(\loop4, PmonoArtic(\avsamp,
     \buf, ~loop,
     \dur, Pseq([1, 1, 1, 1, 1, 1, 1, 0.75, 0.25], inf),
-    \rate, 1.8/1.5,
+    \rate, 1.8,
     \legato, 0.2,
-    \offset, 0.0175,
+    \offset, 0,
     \amp, 0.75,
     \pan, Pseq([0.3, -0.3], inf),
 )).play;
@@ -386,7 +387,7 @@ Pdef(\clap, PmonoArtic(\avsamp,
 //now make it better
 
 
-//here my attempt - fixing up the clap
+//here my attempt - first fixing up the clap
 (
 Pdef(\clap).quant= 4;
 Pdef(\clap, PmonoArtic(\avsamp,
@@ -401,7 +402,7 @@ Pdef(\clap, PmonoArtic(\avsamp,
 (
 Pdef(\hihat).quant= 4;
 Pdef(\hihat, PmonoArtic(\avsamp,
-    \buf, Pseq([Pseq([~hihat], 7), ~hihatopen], inf),
+    \buf, Pseq([Pseq([~hihat], 7), ~hihatopen], inf),  //notice how you can have buffers in patterns too
     \dur, Pseq([0.52, 0.48], inf),  //'swing' the hihat a bit
     \rate, 0.9,
     \amp, Pbjorklund(9, 16)*Pseq([0.25, 0.75], inf)*0.5,
@@ -414,7 +415,7 @@ Pdef(\snare).quant= 4;
 Pdef(\snare, PmonoArtic(\avsamp,
     \buf, ~snare,
     \dur, Pseq([Pseq([1], 14), 0.8, 1.2], inf),
-    \rate, 0.86,
+    \rate, 0.86,  //my snare sounds better played back at a lower rate
     \legato, Pseg(Pseq([0.15, 0.3], inf), 64),
     \amp, Pseq([Pseq([0, 1], 6), 0.25, 1], inf)*0.5,
 )).play;
@@ -424,7 +425,7 @@ Pdef(\snare, PmonoArtic(\avsamp,
 Pdef(\kick).quant= 4;
 Pdef(\kick, PmonoArtic(\avsamp,
     \buf, ~kick,
-    \amp, Pseq([Pseq([0.5], 32-5), Pseq([0], 5+32)], inf),
+    \amp, Pseq([Pseq([0.5], 32-5), Pseq([0], 5+32)], inf),  //pause at regular intervals
     \atk, 0,
 )).play;
 )
