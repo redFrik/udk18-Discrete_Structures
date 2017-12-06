@@ -509,7 +509,7 @@ NOTE: this will require unity version 5.5 or newer. and if you try it in 2D reme
 ![00material](00material.png?raw=true "00material")
 
 * select GameObject / Create Empty
-* select Component / Effect / Line Renderer
+* select Component / Effects / Line Renderer
 * in the GameObject's inspector find Materials and flip down / expand it
 * click on the little circle next to Element 0 and select LineMat by double clicking
 
