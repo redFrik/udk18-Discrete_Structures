@@ -45,7 +45,7 @@ NOTE: again this will require unity version 5.5 or newer. and if you try it in 2
 
 * also try setting `Min Vertex Distance` to something high like 8 and observe what happens
 
-so trails bascially follow any object but are erased after a fixed time. now move the game object around automatically with a script...
+so trails basically follow any object but are erased after a fixed time. now move the game object around automatically with a script...
 
 * create a new script by selecting Assets / Create / C# Script
 * give the script the name 'Trails' by typing under the white icon
@@ -74,8 +74,8 @@ public class Trails : MonoBehaviour {
 ```
 
 * attach the script to the GameObject by drag and drop.
-* play around with the script variables - specailly try setting `xspeed`, `yspeed` to 1, 1.25, 0.5, 0.33333 etc and compare it with slightly _nudged_ values like 1.251, 0.49, 0.32 etc
-* don't forget to change the `Min Vertex Distance`, `Time` and other paramters
+* play around with the script variables - specially try setting `xspeed`, `yspeed` to 1, 1.25, 0.5, 0.33333 etc and compare it with slightly _nudged_ values like 1.251, 0.49, 0.32 etc
+* don't forget to change the `Min Vertex Distance`, `Time` and other parameters
 * also try the different variants in the script (by uncommenting and commenting out lines)
 * drag a photo from your computer into the Assets, then onto the Base Texture icon in Material inspector
 * try some different shaders
@@ -218,24 +218,27 @@ public class Trails3 : MonoBehaviour {
 ```
 
 * save and switch back to unity
-* add a light be selecting GameObject / Light / Directional Light (remember to test different positions, rotations, colours etc later )
-* in the upper left hierachy window, click to select the 'Main Camera'
+* add a light by selecting GameObject / Light / Directional Light (remember to test different positions, rotation, colours etc later )
+* in the upper left hierarchy window, click to select the 'Main Camera'
 * attach the script to the camera by selecting Component / Scripts / Trails3 (or just drag and drop the script onto the camera)
-* select GameObject / 3D Object / Sphere - or whatever you feel like
+* select GameObject / 3D Object / Sphere (or whatever you feel like - can also be an empty game object)
 * select the Main Camera and in the inspector click on the little circle next to prefab. select the Sphere by doubleclicking in the dialog that pops up (or just drag the sphere onto the prefab variable slot)
-* add a Trail Renderer to the Sphere (by first clicking sphere in the hierachy window, then selecting Component / Effects / Trail Renderer)
-* set `Time` to 5, `Min Vertex Distance` to 0, `Width` to 5, `Corner Vertices` to 50, `End Cap Verticies` also to 50
+* add a Trail Renderer to the Sphere (by first clicking sphere in the hierarchy window, then selecting Component / Effects / Trail Renderer)
+* set `Time` to 5, `Min Vertex Distance` to 0, `Width` to 5, `Corner Vertices` to 50, `End Cap Verticies` also to 50 and in the pop up Texture Mode select Tile
+
+![04material](04material.png?raw=true "04material")
+
 * select Assets / Create / Material
 * give the material a name (can be anything - here 'Trail3Mat') by typing under the icon
 * at the top of the inspector for the material select Shader / Particle / Additive (or some other shader also possible)
 * also click on the Particle Texture icon and select 'Default-Particle' (or import your own photo and add it here)
 * finally find Materials /Element 0 in the Sphere's inspector (under Trail Renderer) and set it to Trail3Mat
 
-![04strange](04strange.png?raw=true "04strange")
+![05strange](05strange.png?raw=true "05strange")
 
 play around (don't forget to change variables speed, spread, scale etc in the code, hack it and write your own variants)
 
 links
 ==
 
-Board To Bits' Unity 101 playlist - https://www.youtube.com/watch?v=kH_piLCynto&list=PL5KbKbJ6Gf9_H4MZC1v6ETs_ifnLfNJVw
+Board To Bits - [Unity 101 playlist](https://www.youtube.com/watch?v=kH_piLCynto&list=PL5KbKbJ6Gf9_H4MZC1v6ETs_ifnLfNJVw)
