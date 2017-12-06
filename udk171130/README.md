@@ -310,7 +310,7 @@ Pdef(\loop2).play;
 Pdef(\loop3).play;
 Pdef(\loop4).play;
 
-CmdPeriod.hardRun;  //stop all
+CmdPeriod.run;  //stop all
 
 //now try loading different soundfiles into the ~loop buffer
 //adjust number of beats in your pattern/tempo code if necessary

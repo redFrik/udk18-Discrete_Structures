@@ -4,16 +4,407 @@ more samples and trails
 supercollider
 ==
 
-TODO
+we need to find some soundfiles to work with.
+
+download this one... https://raw.githubusercontent.com/redFrik/udk18-Discrete_Structures/master/udk171207/ljudfil.aiff
+
+you can also render your own on **mac osx**. open Terminal and type...
+
+`say hallo`
+
+and if that works write it to a 16bit, 44100 aiff soundfile like this...
+
+`say -o ~/Desktop/hallo.aiff --data-format=BEI16@44100 hallo`
+
+the file should end up on your desktop.
+
+you can also download a wav or aiff from the internet or record your own using for example [Audacity](http://www.audacityteam.org)
 
 NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.wav`
 
 ```supercollider
+
 s.boot;
 s.meter;
 s.scope;
 
-//TODO
+(
+~samp.free;
+~samp= Buffer.readChannel(s, "/Users/asdf/Desktop/ljudfil.aiff", channels:[0]);
+)
+
+//--load a sampler (a synth definition for playing buffers)
+(
+SynthDef(\avsamp, {|out= 0, buf, rate= 1, offset= 0, atk= 0.005, rel= 0.01, cur= -4, amp= 0.1, pan= 0, gate= 1, loop= 1|
+    var env= EnvGen.ar(Env.asr(atk, 1, rel, cur), gate, doneAction:2);
+    var src= PlayBuf.ar(1, buf, rate*BufRateScale.ir(buf), 1, offset*BufFrames.ir(buf), loop);
+    OffsetOut.ar(out, Pan2.ar(src*env*amp, pan));
+}).add;
+)
+
+TempoClock.tempo= 1;  //let us start with the default tempo 60bpm - but you can change it at any time
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.5,  //trigger a new after 50% of the first one
+    \rel, 2,  //set a longer duration
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.25,  //trigger at 25%, 50% and 75% as well as at 0
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125,  //1/8
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125+Pstutter(10, Pseq([0.05, 0, -0.05], inf)),  //adding small variations every 10th time
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125+Pstutter(10, Pseq([0.05, 0, -0.05], inf)),
+    \rel, 6,  //same but with much longer release time
+    \amp, 0.75,
+)).play;
+)
+
+//back to simple
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.5,  //two
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.5,
+    \offset, 0.5,  //now add an offset to both (starting position will be at 50%)
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.5,
+    \offset, Pseq([0, 0.5], inf),  //note: now in sync - try nudging the 0.5 a little bit up/down
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.25,  //now at 1/4
+    \offset, Pseq([0, 0.25, 0.5, 0.75], inf),  //again in sync - try nudging or reordering
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125,  //now at 1/8
+    \offset, Pseq([0, 0.25, 0.5, 0.75], inf),
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125,
+    \offset, Pseq([0, 0.25, 0.5, 0.75], inf)+Pstutter(10, Pseq([0.06, 0, -0.05], inf)),  //plus small variation
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.25,  //slower
+    \offset, Pseq([0, 1/3, 2/3], inf),  //different offset positions
+    \rate, Pstutter(4, Pseq([0.8, 0.9, 1, 1.1, 1.2], inf)),  //pattern for the playback rate
+    \rel, 2,
+    \amp, 0.75,
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125,
+    \rate, Pseq([0.8, 0.9, 1, 1.1, 1.2], inf),
+    \rel, 15,  //very long release
+    \amp, 0.75*Pseq([1, 0, 0, 1, 0, 1, 0], inf),  //pattern for amplitudes - 4 out of 7 are muted
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125,
+    \rate, Pseq([0.8, 0.9, 1, 1.1, 1.2], inf)*Pseq([-1, 1], inf),  //every second backwards
+    \rel, 15,
+    \amp, 0.75*Pseq([1, 0, 0, 1, 0, 1, 0], inf),
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125,
+    \rate, Pseq([0.8, 0.9, 1, 1.1, 1.2], inf)*Pseq([-1, 1], inf)*Pseq([1, 1, 1, 1.5], inf),  //every fourth higher
+    \rel, 15,
+    \amp, 0.75*Pseq([1, 0, 0, 1, 0, 1, 0], inf),
+)).play;
+)
+
+(
+Pdef(\samp, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, ~samp.duration*0.125,
+    \rate, Pseq([0.8, 0.9, 1, 1.1, 1.2], inf)*Pseq([-1, 1], inf)*Pseq([1, 1, 1, 1.5], inf),
+    \rel, 15,
+    \amp, 0.75*Pseq([1, 0, 0, 1, 0, 1, 0], inf),
+    \pan, Pseq([0.9, 0.5, 0, -0.5, -0.9, -0.5, 0, 0.5], inf),  //adding panning
+)).play;
+)
+
+Pdef(\samp).stop;
+
+
+//--many
+
+(
+Pdef(\short0).quant= 0;
+Pdef(\short0, PmonoArtic(\avsamp,
+    \buf, ~samp,
+    \dur, 2,
+    \legato, 0.08,
+    \offset, 0.45,  //find a good spot 0.0-1.0
+    \amp, 0.75,
+    \pan, Pseq([-0.5, 0, 0.5], inf),
+)).play;
+
+Pdef(\short1).quant= 0;
+Pdef(\short1, PmonoArtic(\avsamp,  //a second sequencer
+    \buf, ~samp,
+    \dur, 2.01,  //slightly slower
+    \legato, 0.10,  //slightly longer
+    \offset, 0.44,  //slightly earlier
+    \amp, 0.75,
+    \pan, Pseq([-0.5, 0, 0.5], inf),
+)).play;
+
+Pdef(\short2).quant= 0;
+Pdef(\short2, PmonoArtic(\avsamp,  //a third sequencer
+    \buf, ~samp,
+    \dur, 2.02,  //again a bit slower
+    \legato, 0.12,  //and longer
+    \offset, 0.43,  //and earlier
+    \amp, 0.75,
+    \pan, Pseq([-0.5, 0, 0.5], inf),
+)).play;
+
+Pdef(\short3).quant= 0;
+Pdef(\short3, PmonoArtic(\avsamp,  //a fourth sequencer
+    \buf, ~samp,
+    \dur, 2.03,  //even slower
+    \legato, 0.14,  //longer
+    \offset, 0.42,  //and earlier
+    \amp, 0.75,
+    \pan, Pseq([-0.5, 0, 0.5], inf),
+)).play;
+)
+
+(
+Pdef(\short0).stop;
+Pdef(\short1).stop;
+Pdef(\short2).stop;
+Pdef(\short3).stop;
+)
+
+//to make many more, let us write this as an algorithm instead
+
+//this should be exactly the same as above...
+(
+4.do{|i|
+    var name= (\short++i).asSymbol;
+    Pdef(name).quant= 0;
+    Pdef(name, PmonoArtic(\avsamp,
+        \buf, ~samp,
+        \dur, 2+(i*0.01),
+        \legato, 0.08+(i*0.02),
+        \offset, 0.45-(i*0.01),
+        \amp, 0.75,
+        \pan, Pseq([-0.5, 0, 0.5], inf),
+    )).play;
+};
+)
+
+(
+12.do{|i|  //many more (12 in total)
+    var name= (\short++i).asSymbol;
+    Pdef(name).quant= 0;
+    Pdef(name, PmonoArtic(\avsamp,
+        \buf, ~samp,
+        \dur, 2+(i*0.01),
+        \legato, 0.08+(i*0.02),
+        \offset, 0.45-(i*0.01),
+        \amp, 0.65,
+        \pan, Pseq([-0.5, 0, 0.5], inf),
+    )).play;
+};
+)
+
+(
+30.do{|i|  //even more
+    var name= (\short++i).asSymbol;
+    Pdef(name).quant= 0;
+    Pdef(name, PmonoArtic(\avsamp,
+        \buf, ~samp,
+        \dur, 2+(i*0.01),
+        \legato, 0.08+(i*0.02),
+        \offset, 0.45-(i*0.01),
+        \amp, 0.55,  //turning down the amplitude for each
+        \pan, Pseq([-0.5, 0, 0.5], inf),
+    )).play;
+};
+)
+
+(
+30.do{|i|
+    var name= (\short++i).asSymbol;
+    Pdef(name).quant= 0;
+    Pdef(name, PmonoArtic(\avsamp,
+        \buf, ~samp,
+        \dur, 2+(i*0.01)*3,  //scale all durations *3
+        \legato, 0.08+(i*0.02),
+        \offset, 0.45-(i*0.01),
+        \rate, i.linlin(0, 29, 0.95, 1.05),  //set a unique playbackrate for each
+        \amp, 0.45,
+        \pan, Pseq([-0.5, 0, 0.5], inf),
+    )).play;
+};
+)
+
+
+(
+30.do{|i|
+    var name= (\short++i).asSymbol;
+    Pdef(name).quant= 0;
+    Pdef(name, PmonoArtic(\avsamp,
+        \buf, ~samp,
+        \dur, 2+(i*0.01)*3,
+        \legato, 0.08+(i*0.02),
+        \offset, 0.45-(i*0.01),
+        \rate, i%2+1,  //every other one octave up
+        \amp, 0.45,
+        \pan, Pseq([-0.5, 0, 0.5], inf),
+    )).play;
+};
+)
+
+(
+30.do{|i|
+    var name= (\short++i).asSymbol;
+    Pdef(name).quant= 0;
+    Pdef(name, PmonoArtic(\avsamp,
+        \buf, ~samp,
+        \dur, 2+(i*0.01)*3,
+        \legato, 0.08+(i*0.02),
+        \offset, 0.45-(i*0.01),
+        \rate, i%2+1*Pseq([1, 1, -1], inf),  //every other one octave up and every third backwards
+        \amp, 0.45*Pdefn(\vol, 1),
+        \pan, Pseq([-0.5, 0, 0.5], inf),
+    )).play;
+};
+)
+
+//stop this madness!
+(
+30.do{|i|
+    var name= (\short++i).asSymbol;
+    Pdef(name).stop;
+};
+)
+
+//now try loading different soundfiles (at the top of this example)
+
+//or try recording from internal microphone like last week...
+(
+SynthDef(\avrec, {|buf|
+    RecordBuf.ar(Limiter.ar(SoundIn.ar), buf, loop:0, doneAction:2);
+}).add;
+)
+
+Synth(\avrec, [\buf, ~samp]);  //record into ~loop buffer (only overwrite what is in memory - not on disk)
+
+
+//--
+
+//to control the over all volume one can add a Pdefn to all \amp keys.  example:
+\amp, 0.45*Pdefn(\vol, 1),
+
+//and then slowly fade in and out like this...
+Pdefn(\vol, 0.1);
+Pdefn(\vol, 0.5);
+Pdefn(\vol, 0.1);
+Pdefn(\vol, 0);
+//and for a simple gui slider control run this line...
+Slider(bounds:Rect(10, 10, 100, 200)).front.action= {|v| Pdefn(\vol, v.value.postln)};
+
+//stop all with
+(
+30.do{|i|
+    var name= (\short++i).asSymbol;
+    Pdef(name).stop;
+};
+)
+//or
+Pdef.all.do{|x| x.stop}
+
+//or immediately with
+CmdPeriod.run;
 
 ```
 
