@@ -6,9 +6,9 @@ supercollider
 
 we need to find some soundfiles to work with.
 
-download this one... https://raw.githubusercontent.com/redFrik/udk18-Discrete_Structures/master/udk171207/ljudfil.aiff
+download this one... https://raw.githubusercontent.com/redFrik/udk18-Discrete_Structures/master/udk171207/ljudfil.aiff (on osx you can alt+click the link to download the file directly)
 
-you can also render your own on **mac osx**. open Terminal and type...
+you can also render your own. on **mac osx** open Terminal and type...
 
 `say hallo`
 
@@ -18,7 +18,7 @@ and if that works write it to a 16bit, 44100 aiff soundfile like this...
 
 the file should end up on your desktop.
 
-you can also download a wav or aiff from the internet or record your own using for example [Audacity](http://www.audacityteam.org)
+you can also download a wav or aiff from the internet or record your own using for example [Audacity](http://www.audacityteam.org). vocal recordings or speech should work well.
 
 NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.wav`
 
@@ -151,7 +151,7 @@ Pdef(\samp, PmonoArtic(\avsamp,
 Pdef(\samp, PmonoArtic(\avsamp,
     \buf, ~samp,
     \dur, ~samp.duration*0.125,
-    \offset, Pseq([0, 0.25, 0.5, 0.75], inf)+Pstutter(10, Pseq([0.06, 0, -0.05], inf)),  //plus small variation
+    \offset, Pseq([0, 0.25, 0.5, 0.75], inf)+Pstutter(10, Pseq([0.05, 0, -0.05], inf)),  //plus small variation
     \rel, 2,
     \amp, 0.75,
 )).play;
@@ -211,8 +211,9 @@ Pdef(\samp, PmonoArtic(\avsamp,
 
 Pdef(\samp).stop;
 
+//that was using a single sample with a single sequencer
 
-//--many
+//--many independent sequencers
 
 (
 Pdef(\short0).quant= 0;
@@ -220,7 +221,7 @@ Pdef(\short0, PmonoArtic(\avsamp,
     \buf, ~samp,
     \dur, 2,
     \legato, 0.08,
-    \offset, 0.45,  //find a good spot 0.0-1.0
+    \offset, 0.45,  //find a good spot 0.0-1.0 - depends on your sample - also adjust offset accordingly in the sequencers below
     \amp, 0.75,
     \pan, Pseq([-0.5, 0, 0.5], inf),
 )).play;
@@ -327,7 +328,6 @@ Pdef(\short3).stop;
 };
 )
 
-
 (
 30.do{|i|
     var name= (\short++i).asSymbol;
@@ -337,7 +337,7 @@ Pdef(\short3).stop;
         \dur, 2+(i*0.01)*3,
         \legato, 0.08+(i*0.02),
         \offset, 0.45-(i*0.01),
-        \rate, i%2+1,  //every other one octave up
+        \rate, i%2+1,  //every other one octave up - could be written simpler with Pseq([1, 2], inf)
         \amp, 0.45,
         \pan, Pseq([-0.5, 0, 0.5], inf),
     )).play;
@@ -353,8 +353,8 @@ Pdef(\short3).stop;
         \dur, 2+(i*0.01)*3,
         \legato, 0.08+(i*0.02),
         \offset, 0.45-(i*0.01),
-        \rate, i%2+1*Pseq([1, 1, -1], inf),  //every other one octave up and every third backwards
-        \amp, 0.45*Pdefn(\vol, 1),
+        \rate, i%2+1*Pseq([1, 1, -1], inf),  //every other one octave up and every third backwards - can also be written Pseq([1, 2, -1, 2, 1, -2], inf)
+        \amp, 0.45,
         \pan, Pseq([-0.5, 0, 0.5], inf),
     )).play;
 };
@@ -368,7 +368,7 @@ Pdef(\short3).stop;
 };
 )
 
-//now try loading different soundfiles (at the top of this example)
+//now try loading different soundfiles (at the top of this page)
 
 //or try recording from internal microphone like last week...
 (
@@ -377,19 +377,35 @@ SynthDef(\avrec, {|buf|
 }).add;
 )
 
-Synth(\avrec, [\buf, ~samp]);  //record into ~loop buffer (only overwrite what is in memory - not on disk)
+Synth(\avrec, [\buf, ~samp]);  //record into ~samp buffer (only overwrite what is in memory - not on disk)
 
 
 //--
 
 //to control the over all volume one can add a Pdefn to all \amp keys.  example:
-\amp, 0.45*Pdefn(\vol, 1),
+
+(
+30.do{|i|
+    var name= (\short++i).asSymbol;
+    Pdef(name).quant= 0;
+    Pdef(name, PmonoArtic(\avsamp,
+        \buf, ~samp,
+        \dur, 2+(i*0.01)*3,
+        \legato, 0.08+(i*0.02),
+        \offset, 0.45-(i*0.01),
+        \rate, i%2+1*Pseq([1, 1, -1], inf),
+        \amp, 0.45*Pdefn(\vol, 1),  //note the Pdefn here
+        \pan, Pseq([-0.5, 0, 0.5], inf),
+    )).play;
+};
+)
 
 //and then slowly fade in and out like this...
 Pdefn(\vol, 0.1);
 Pdefn(\vol, 0.5);
 Pdefn(\vol, 0.1);
 Pdefn(\vol, 0);
+
 //and for a simple gui slider control run this line...
 Slider(bounds:Rect(10, 10, 100, 200)).front.action= {|v| Pdefn(\vol, v.value.postln)};
 
@@ -633,3 +649,7 @@ links
 ==
 
 Board To Bits - [Unity 101 playlist](https://www.youtube.com/watch?v=kH_piLCynto&list=PL5KbKbJ6Gf9_H4MZC1v6ETs_ifnLfNJVw)
+
+https://freesound.org
+
+import raw - https://github.com/redFrik/udk17-Digital_Harmony/tree/master/udk170622#audacity
