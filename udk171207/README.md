@@ -30,7 +30,7 @@ s.scope;
 
 (
 ~samp.free;
-~samp= Buffer.readChannel(s, "/Users/asdf/Desktop/ljudfil.aiff", channels:[0]);
+~samp= Buffer.readChannel(s, "/Users/asdf/Desktop/ljudfil.aiff", channels:[0]);  //edit this line with the path to your own soundfile
 )
 
 //--load a sampler (a synth definition for playing buffers)
@@ -424,6 +424,40 @@ CmdPeriod.run;
 
 ```
 
+volume
+--
+
+another way to control the global volume in supercollider is to use the built-in Volume class.
+
+```supercollider
+s.volume= 0;  //in decibels - full volume
+s.volume= -12;  //a lot quieter - minus 12dB
+s.volume= -inf;  //silence
+s.volume= 1.ampdb;  //in 'amp' - full volume converted to dB
+s.volume= 0.251.ampdb;  //approximately same as -12dB
+s.volume= 0.ampdb;  //silence
+
+s.volume= 0;  //reset the volume
+s.volume.gui;  //open a gui window
+
+//fade out
+(
+var start= 1, end= 0;  //fade from start to end
+var time= 3;  //over how many seconds
+var resolution= 100;  //in how many steps per second
+Routine({
+    (time*resolution).do{|i|
+        s.volume= i.lincurve(0, time*resolution-1, start, end).ampdb.postln;
+        (1/resolution).wait;
+    };
+    "done".postln;
+}).play(AppClock);
+)
+
+//and do not forget to reset the volume back to full afterwards
+s.volume= 0;
+```
+
 - - -
 
 unity3d
@@ -582,6 +616,8 @@ public class Trails2 : MonoBehaviour {
 }
 
 ```
+
+* attach the script to the main camera and click play
 
 ![03wave](03wave.png?raw=true "03wave")
 
