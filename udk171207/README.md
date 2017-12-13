@@ -42,7 +42,7 @@ SynthDef(\avsamp, {|out= 0, buf, rate= 1, offset= 0, atk= 0.005, rel= 0.01, cur=
 }).add;
 )
 
-TempoClock.tempo= 1;  //let us start with the default tempo 60bpm - but you can change it at any time
+TempoClock.tempo= 1;  //let us start with the default tempo (1bps = 60bpm) - but you can change it at any time
 
 (
 Pdef(\samp, PmonoArtic(\avsamp,

@@ -18,7 +18,7 @@ dates
 - [x] [23nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171123): euclidean rhythms and 3d text
 - [x] [30nov 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171130): samples and lines
 - [x] [07dec 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171207): more samples and trails
-- [ ] 14dec 14-16
+- [ ] [14dec 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk171214): granular synthesis and particle systems
 - [ ] 21dec: **NO CLASS**
 - [ ] 28dec: **NO CLASS**
 - [ ] 04jan: **NO CLASS**
