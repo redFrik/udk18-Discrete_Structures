@@ -8,7 +8,7 @@ again we need to find some soundfiles to work with.
 
 download this one... https://raw.githubusercontent.com/redFrik/udk18-Discrete_Structures/master/udk171214/granular.aiff (on osx you can alt+click the link to download the file directly)
 
-or record your own using Audacity. again speech will work great.
+or record your own using Audacity. like last week something like speech will work great.
 
 NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.wav`
 
@@ -19,7 +19,7 @@ NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.
 
 (
 ~source.free;
-~source= Buffer.readChannel(s, "/Users/Stirling/udk18-Discrete_Structures/udk171214/granular.aiff", channels:[0]);  //edit this line with the path to your own soundfile
+~source= Buffer.readChannel(s, "/Users/asdf/udk18-Discrete_Structures/udk171214/granular.aiff", channels:[0]);  //edit this line with the path to your own soundfile
 )
 
 //--load a sampler (a synth definition for playing a short grain of a buffer)
@@ -34,12 +34,12 @@ SynthDef(\avgrain, {|out= 0, buf, rate= 1, offset= 0, time= 0.1, amp= 0.1, pan= 
 Env.sine(0.1).plot;  //100ms envelope. goes smoothly from 0 to 1 and back
 Env.sine(0.1).test;
 
-//technical note:
-//we will use Pbind this time - not PmonoArtic like previous.
+//--technical note:
+//we will use Pbind this time - not PmonoArtic.
 //this because we don't want to send a 'note-off' (gate=0) osc message
-//for each grain. the grains will have a fixed duration time so we can
-//save 50% of the network traffic by only sending a 'note-on'.
-//therefore Pbind instead of PmonoArtic.
+//for each grain. the grains will have a fixed duration (time argument)
+//so we can save 50% of the network traffic by only sending a 'note-on'.
+//therefore we need to use Pbind instead of PmonoArtic.
 
 (
 Pdef(\gran, Pbind(\instrument, \avgrain,
@@ -333,13 +333,13 @@ Pdef(\gran, Pbind(\instrument, \avgrain,
 ideas
 --
 
-* load more buffers and try blending grains from different buffers i.e. pick randomly or in a sequence - crossfade
+* load more buffers and try blending grains from different buffers i.e. pick randomly or in a sequence - crossfade by adjusting the weights
 
 ```supercollider
 \buf, Pwrand([~source, ~source2, ~source3], [0.8, 0.1, 0.1], inf),  //weighted randomness
 ```
 
-* set up the mic in buffer recorder and then record new sounds for the granulator while it is running.
+* use the built-in microphone and record new sounds for the granulator while it is running.
 
 ```supercollider
 (
@@ -351,7 +351,7 @@ SynthDef(\avrec, {|buf|
 Synth(\avrec, [\buf, ~source]);  //record into ~source buffer (only overwrite what is in memory - not on disk)
 ```
 
-* try with different envelope curves - not only the smooth sine. note: make sure to use the `time` argument to scale durations.
+* try with different envelopes - not only the smooth sine. note: make sure to add the `time` argument to scale durations.
 
 ```supercollider
 Env.triangle(0.1).plot;
@@ -367,7 +367,7 @@ unity3d
 ==
 
 
-![00time](00time.png?raw=true "00time")
+todo
 
 
 links
@@ -375,6 +375,6 @@ links
 
 https://en.wikipedia.org/wiki/Granular_synthesis
 
-[control particles with supercollider](https://github.com/redFrik/udk16-Immersive_Technologies/tree/master/udk161215#advanced-network]
+[control particles with supercollider](https://github.com/redFrik/udk16-Immersive_Technologies/tree/master/udk161215#advanced-network)
 
 [Introduction To Unity: Particle Systems](https://www.raywenderlich.com/113049/introduction-unity-particle-systems)
