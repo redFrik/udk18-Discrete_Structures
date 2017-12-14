@@ -4,22 +4,27 @@ granular synthesis and particle systems
 supercollider
 ==
 
-again we need to find some soundfiles to work with.
+again we need to find some soundfiles to work with. like last week something like speech will work great.
 
 download this one... https://raw.githubusercontent.com/redFrik/udk18-Discrete_Structures/master/udk171214/granular.aiff (on osx you can alt+click the link to download the file directly)
 
-or record your own using Audacity. like last week something like speech will work great.
+or record your own using [Audacity](http://www.audacityteam.org).
 
 NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.wav`
 
 ```supercollider
-
 //mac osx only... will write a soundfile to your desktop
 "say -o ~/Desktop/granular.aiff --data-format=BEI16@44100 granular".unixCmd;
+```
+
+```supercollider
+s.boot;
+s.meter;
+s.scope;
 
 (
 ~source.free;
-~source= Buffer.readChannel(s, "/Users/asdf/udk18-Discrete_Structures/udk171214/granular.aiff", channels:[0]);  //edit this line with the path to your own soundfile
+~source= Buffer.readChannel(s, "/Users/asdf/Desktop/granular.aiff", channels:[0]);  //edit this line with the path to your own soundfile
 )
 
 //--load a sampler (a synth definition for playing a short grain of a buffer)
@@ -31,20 +36,21 @@ SynthDef(\avgrain, {|out= 0, buf, rate= 1, offset= 0, time= 0.1, amp= 0.1, pan= 
 }).add;
 )
 
-Env.sine(0.1).plot;  //100ms envelope. goes smoothly from 0 to 1 and back
+Env.sine(0.1).plot;  //100ms fixed duration envelope. goes smoothly from 0 to 1 and back
 Env.sine(0.1).test;
 
 //--technical note:
-//we will use Pbind this time - not PmonoArtic.
-//this because we don't want to send a 'note-off' (gate=0) osc message
-//for each grain. the grains will have a fixed duration (time argument)
-//so we can save 50% of the network traffic by only sending a 'note-on'.
-//therefore we need to use Pbind instead of PmonoArtic.
+//below we will use Pbind and not PmonoArtic like before. this is because
+//Pbind does not need to send a 'note-off' (gate= 0) osc message for each
+//synth. the synths will play for a fixed duration (here called 'time').
+//so we can save 50% of the network traffic by only sending a 'note-on'
+//and this is a huge saving when we are generating thousands of synths.
+//therefore Pbind instead of PmonoArtic.
 
 (
 Pdef(\gran, Pbind(\instrument, \avgrain,
     \buf, ~source,
-    \dur, 0.5,  //half a second delay between each grain/event
+    \dur, 0.5,   //half a second delay between each grain/event
     \time, 0.5,  //half a second envelope
     \offset, 0,  //starting at the beginning - try change (range 0-1)
     \amp, 0.75
@@ -54,7 +60,7 @@ Pdef(\gran, Pbind(\instrument, \avgrain,
 (
 Pdef(\gran, Pbind(\instrument, \avgrain,
     \buf, ~source,
-    \dur, 0.25,  //faster - quarter of a second
+    \dur, 0.25,   //faster - quarter of a second
     \time, 0.25,  //and shorter
     \offset, 0,
     \amp, 0.75,
@@ -64,7 +70,7 @@ Pdef(\gran, Pbind(\instrument, \avgrain,
 (
 Pdef(\gran, Pbind(\instrument, \avgrain,
     \buf, ~source,
-    \dur, 0.125,  //even faster
+    \dur, 0.125,   //even faster
     \time, 0.125,  //and also shorter
     \offset, 0,
     \amp, 0.75,
@@ -336,12 +342,6 @@ Pdef(\gran, Pbind(\instrument, \avgrain,
 ideas
 --
 
-* load more buffers and try blending grains from different buffers i.e. pick randomly or in a sequence - crossfade by adjusting the weights
-
-```supercollider
-\buf, Pwrand([~source, ~source2, ~source3], [0.8, 0.1, 0.1], inf),  //weighted randomness
-```
-
 * use the built-in microphone and record new sounds for the granulator while it is running.
 
 ```supercollider
@@ -354,12 +354,18 @@ SynthDef(\avrec, {|buf|
 Synth(\avrec, [\buf, ~source]);  //record into ~source buffer (only overwrite what is in memory - not on disk)
 ```
 
-* try with different envelopes - not only the smooth sine. note: make sure to add the `time` argument to scale durations.
+* edit the synthdef and try with different envelopes - not only the smooth sine. note: make sure to add the `time` argument to scale durations.
 
 ```supercollider
 Env.triangle(0.1).plot;
 Env.perc(0.01, 0.1).plot;
 Env.linen(0.01, 0.01, 0.1, 1, [4, 0, -5]).plot;
+```
+
+* load more buffers and try blending grains from different buffers i.e. pick randomly or in a sequence - crossfade by adjusting the weights
+
+```supercollider
+\buf, Pwrand([~source, ~source2, ~source3], [0.8, 0.1, 0.1], inf),  //weighted randomness
 ```
 
 * recommended reading: Curtis Roads - Microsound (2001)
@@ -369,7 +375,7 @@ Env.linen(0.01, 0.01, 0.1, 1, [4, 0, -5]).plot;
 granulator
 --
 
-try the code in [granulator.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171214/granulator.scd?raw=true). this gui example loads a whole directory of soundfiles and play back fragments from all or some of them.
+try the code in [granulator.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171214/granulator.scd?raw=true). this example loads a whole directory of soundfiles and play back fragments from all or some of them. it also includes a gui.
 
 unity3d
 ==
@@ -510,7 +516,7 @@ public class PartMult : MonoBehaviour {
 
 ![05multiple](05multiple.png?raw=true "05multiple")
 
-modify the code and play with the particle system in the prefab (stop first before trying to make changes). also try setting 'Simulation Space' to 'World' ('Local' works better here i think). change the prefab's material etc etc.
+modify the code and play with the particle system in the prefab (stop first before trying to make changes). also try setting 'Simulation Space' to 'World' (though 'Local' works better here i think). change the prefab's material etc etc.
 
 links
 ==

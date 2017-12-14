@@ -39,6 +39,7 @@ Pdef(\granulator, Pbind(\instrument, \avgrain,
 )).play;
 )
 
+//gui interface
 (
 var win= Window("granulator", Rect(10, 10, 400, 600));
 var mul;
