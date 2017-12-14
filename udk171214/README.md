@@ -380,7 +380,7 @@ try the code in [granulator.scd](https://github.com/redFrik/udk18-Discrete_Struc
 unity3d
 ==
 
-* start unity and create a new 3D project. give it a name (here 'part').
+* start unity and create a new 3D (or 2D) project. give it a name (here 'part').
 * select Assets / Create / Material
 * give the material a name (can be anything - here 'PartMat') by typing under the icon
 * at the top of the inspector for the material select Shader / Particles / Additive
@@ -389,7 +389,7 @@ unity3d
 * select GameObject / Create Empty
 * select Component / Effects / Particle System
 * drag and drop your PartMat material onto the GameObject
-* move around the GameObject - observe how the particle system follow along
+* move around the GameObject with x, y, z in Transform - observe how the particle system follow along
 
 ![00setup](00setup.png?raw=true "00setup")
 
@@ -403,9 +403,11 @@ unity3d
 
 ![02settings](02settings.png?raw=true "02settings")
 
+(if you are in 2D skip the 'Align To Direction')
+
 * select the Main Camera and set 'Clear Flags' to 'Solid Color'
 * select a background
-* change 'Field of View' (here 120) and you should see something like this...
+* change 'Field of View' (here 120) (if 2D use Size instead) and you should see something like this...
 
 ![03green](03green.png?raw=true "03green")
 
