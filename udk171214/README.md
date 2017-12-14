@@ -328,6 +328,9 @@ Pdef(\gran, Pbind(\instrument, \avgrain,
     \pan, Pseq([-0.5, 0, 0, 0.5, 0], inf),
 )).play;
 )
+
+//experiment!
+//note: make sure duration is never 0. watch your cpu usage and save often. also keep an eye on level meters. scale down your amplitude if you are clipping
 ```
 
 ideas
@@ -363,18 +366,155 @@ Env.linen(0.01, 0.01, 0.1, 1, [4, 0, -5]).plot;
 
 - - -
 
+granulator
+--
+
+try the code in [granulator.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171214/granulator.scd?raw=true). this gui example loads a whole directory of soundfiles and play back fragments from all or some of them.
+
 unity3d
 ==
 
+* start unity and create a new 3D project. give it a name (here 'part').
+* select Assets / Create / Material
+* give the material a name (can be anything - here 'PartMat') by typing under the icon
+* at the top of the inspector for the material select Shader / Particles / Additive
+* optionally set the Tint Color to something (here green)
+* also click on the Particle Texture icon and select 'Default-Particle'
+* select GameObject / Create Empty
+* select Component / Effects / Particle System
+* drag and drop your PartMat material onto the GameObject
+* move around the GameObject - observe how the particle system follow along
 
-todo
+![00setup](00setup.png?raw=true "00setup")
 
+* find the 'Simulation Space' option in the Particle System inspector and change from 'Local' to 'World'
+* again move around the GameObject - observe the difference
+
+![01simulation](01simulation.png?raw=true "01simulation")
+
+* here we want to use 'World' so keep that setting
+* set the following under 'Emission' and 'Shape'...
+
+![02settings](02settings.png?raw=true "02settings")
+
+* select the Main Camera and set 'Clear Flags' to 'Solid Color'
+* select a background
+* change 'Field of View' (here 120) and you should see something like this...
+
+![03green](03green.png?raw=true "03green")
+
+now experiment with the particles. things to try:
+
+* start speed and start size
+* gravity modifier
+* different shapes (e.g. Donut)
+* activate 'Color over Lifetime' and set start and end colours
+* min and max particle size (under Renderer)
+* etc
+
+when you are happy you can add the following script to move the particle system around...
+
+* create a new script by selecting Assets / Create / C# Script
+* give the script the name 'PartMove' by typing under the white icon
+* double click the white C# script icon to open it in MonoDevelop
+* copy and paste in the code here below replacing what was there originally
+
+```cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PartMove : MonoBehaviour {
+    public float xspeed= 2.0F;
+    public float yspeed= 3.0F;
+    public float zspeed= 4.0F;
+    public float scale = 5.0F;
+    public float xrot = 1.0F;
+    public float yrot = 0.0F;
+    public float zrot = 0.0F;
+    void Start () {
+    }
+    void Update () {
+        transform.localPosition = new Vector3 (Mathf.Sin (Time.time * xspeed) * scale, Mathf.Cos (Time.time * yspeed) * scale, 0);
+        //transform.localPosition = new Vector3 (Mathf.Sin (Time.time * xspeed) * scale, Mathf.Cos (Time.time * yspeed) * scale, Mathf.Sin (Time.time * zspeed) * scale);
+        transform.localEulerAngles = new Vector3 (Time.time*xrot, Time.time*yrot, Time.time*zrot);
+    }
+}
+```
+
+* attach the script to the GameObject by drag and drop.
+* play around with the script variables
+* try the different variants by commenting out lines
+
+technical note: since last week i've discovered `Time.time` which should give ever so slightly smoother animation compared to `Time.frameCount`
+
+multiple
+--
+
+the following example creates many particle systems
+
+* start unity and create a new 3D project. give it a name (here partmult)
+* create a new script by selecting Assets / Create / C# Script
+* give the script the name 'PartMult' by typing under the white icon
+* double click the white C# script icon to open it in MonoDevelop
+* copy and paste in the code here below replacing what was there originally
+
+```cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PartMult : MonoBehaviour {
+    public GameObject prefab;
+    public float spread= 1.0F;
+    public float scale = 5.0F;
+    int num= 10;  //number of objects (and particle systems)
+    List<GameObject> list= new List<GameObject>();
+    void Start() {
+        for (int i = 0; i < num; i++) {
+            list.Add (Instantiate (prefab, new Vector3 (0, 0, 0), Quaternion.identity));
+        }
+        prefab.gameObject.SetActive (false);  //hide prefab object
+    }
+    void Update () {
+        float i = 0;
+        foreach (GameObject go in list) {
+            i++;
+            float theta = (Time.time * spread) + ((i / num)*Mathf.PI*2);
+            ParticleSystem ps = go.GetComponent<ParticleSystem> ();
+            ps.startColor = new Color(1-(i/num), 0.1F, i/num, 1.0F);
+            var em= ps.emission; em.rateOverTime= i*10;
+            //var sh = ps.shape; sh.arc = i*10;
+
+            go.transform.localPosition = new Vector3 (
+                Mathf.Sin(theta)*scale,
+                Mathf.Cos(theta)*scale,
+                1
+            );
+        }
+    }
+}
+```
+
+* create a new material by selecting Assets / Create / Material
+* give the material a name (can be anything - here 'PartMat') by typing under the icon
+* at the top of the inspector for the material select Shader / Particle / Additive (or some other shader also possible)
+* also click on the Particle Texture icon and select 'Default-Particle' (or import your own photo and add it here)
+* select GameObject / Create Empty (can also be a sphere or some other object if you want to try)
+* select Component / Effects / Particle System
+* drag and drop the PartMat material onto the GameObject
+* drag and drop the PartMult script onto the Main Camera
+* drag the GameObject onto Prefab variable in Main Camera's inspector
+* set Main Camera's 'Clear Flags' to 'Solid Color' and select a black background
+* play
+
+![05multiple](05multiple.png?raw=true "05multiple")
+
+modify the code and play with the particle system in the prefab (stop first before trying to make changes). also try setting 'Simulation Space' to 'World' ('Local' works better here i think). change the prefab's material etc etc.
 
 links
 ==
 
 https://en.wikipedia.org/wiki/Granular_synthesis
-
-[control particles with supercollider](https://github.com/redFrik/udk16-Immersive_Technologies/tree/master/udk161215#advanced-network)
 
 [Introduction To Unity: Particle Systems](https://www.raywenderlich.com/113049/introduction-unity-particle-systems)
