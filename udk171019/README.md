@@ -30,6 +30,7 @@ s.scope;
 SynthDef(\avsynth, {|out= 0, freq= 400, atk= 0.01, rel= 0.1, cur= -4, amp= 0.1, gate= 1, pan= 0, mod= 1, filtAmt= 200, filtQ= 0.1, filtLag= 0|
     var env= EnvGen.ar(Env.asr(atk, 1, rel, cur), gate, doneAction:2);
     var snd= VarSaw.ar(freq, 0, LFDNoise3.ar(env*mod, 0.5, 0.5));
+    filtAmt= filtAmt.clip(4, 4000);
     snd= BLowPass4.ar(snd, env.lag(filtLag)*filtAmt+(filtAmt*4), 1-env+filtQ.clip(0.01, 30));
     Out.ar(out, Pan2.ar(snd*env, pan, amp));
 }).add;
