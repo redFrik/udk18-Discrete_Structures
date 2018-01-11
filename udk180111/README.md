@@ -145,11 +145,31 @@ now edit the script while the scene is running and try changing the code in the 
 things to explore...
 
 * scale time to draw faster, scale x, y to draw wider
-* add a sin function for z
-* try to round other numbers
+* add a sine function for z `float z = Mathf.Sin (Time.time * 7.0F) * 5.5F;`
+* try to round some other numbers
 * modulate start color and trail time
 * add the script to a new (visible) game object like a sphere
 * etc
+
+look-up table
+--
+
+instead of sine functions one can use an array of floats. here is a variation of the above. replace the update method with this...
+
+```cs
+void Update () {
+    trail.time = 0.3F;
+    trail.startColor = Color.white;
+    trail.endColor = Color.black;
+    trail.startWidth = 0.5F;
+    trail.endWidth = 0.0F;
+    float[] data = new float[] {0.1f, 0.2f, 0.3f, 0.2f, 0.1f, -0.2f, -1.3f, -0.1f};    //add your own floats here
+    float x = Time.time*4.0F%20.0F-10.0f;   //left to right scanning - can also be a lookup, sine or whatever
+    float y= data[(int)Mathf.Round(Time.frameCount*0.2F) % data.Length]*10.0F;
+    float z= data[(int)Mathf.Round(Time.frameCount*0.1F) % data.Length]*10.0F+10.0F;
+    transform.localPosition= new Vector3 (x, y, z);
+}
+```
 
 first person character
 --
@@ -162,6 +182,7 @@ first person character
 ![01prefab](01prefab.png?raw=true "01prefab")
 
 * drag&drop the FPSController onto the hierarchy window
+* disable the Main Camera
 * press play and you should be able to walk around inside your trails using the arrow keys + mouse
 * optionally edit the settings for the camera inside the FirstPersonCharacter to use the same settings (Solid Color) as your main camera had in the example above
 
