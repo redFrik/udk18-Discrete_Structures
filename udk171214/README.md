@@ -370,12 +370,12 @@ Env.linen(0.01, 0.01, 0.1, 1, [4, 0, -5]).plot;
 
 * recommended reading: Curtis Roads - Microsound (2001)
 
-- - -
-
 granulator
 --
 
 try the code in [granulator.scd](https://github.com/redFrik/udk18-Discrete_Structures/blob/master/udk171214/granulator.scd?raw=true). this example loads a whole directory of soundfiles and play back fragments from all or some of them. it also includes a gui.
+
+- - -
 
 unity3d
 ==
