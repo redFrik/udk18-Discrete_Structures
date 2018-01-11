@@ -95,6 +95,91 @@ things to explore...
 * legato, atk, rel, cur
 * etc
 
+```supercollider
+//some code we wrote class...
+
+Pseq([0.125, 1], inf).asStream.nextN(10);
+Pseq([Pseq([1300, 300], 2), 400, 600, 700], inf).asStream.nextN(100);
+Pseq([0, 1, 5, 4, 2, 1, Pseq([-5, 1, 8], 2)], inf).asStream.nextN(100).plot(discrete:true);
+
+//demonstrates what \cur do...
+Env.linen(0.1, 1, 0.5, 1, -4).plot
+Env.linen(0.1, 1, 0.5, 1, 0).plot  //linear
+Env.linen(0.1, 1, 0.5, 1, 4).plot
+
+(
+Pdef(\pat1, PmonoArtic(\avsynth,
+    \freq, Pseq([Pseq([1300, 300], 2), 400, 600, 700], inf),
+    \dur, 0.25,
+    \cur, Pseq([0, 0, 0, 0, -12, 0, 0, 12], inf),
+    \legato, Pseq([0.2, 1], inf),
+)).play;
+)
+
+TempoClock.tempo= 1.5  //global tempo (default is 1)
+TempoClock.tempo= 2
+
+//cmd+shift+b  //mac only - balance and expands selection. useful for checking if brackets etc match
+
+(
+Pdef(\first, PmonoArtic(\avsynth,
+    \freq, Pseq([Pseq([100, Pseq([100, 200, 500, 600], 2), 600], 8), 500, 900], inf),
+    \dur, 0.126,
+    \legato, 1,
+)).play;
+Pdef(\second, PmonoArtic(\avsynth,
+    \freq, Pseq([Pseq([100, 200, Pseq([100, 200, 500, 600], 2), 600], 8), 500, 900], inf),
+    \dur, 0.127,
+    \legato, 1,
+)).play;
+Pdef(\third, PmonoArtic(\avsynth,
+    \freq, Pseq([Pseq([100, 200, Pseq([100, 200, 500, 600], 2), 600], 8), 500, 900], inf),
+    \dur, 0.128,
+    \legato, 1,
+)).play;
+Pdef(\fourth, PmonoArtic(\avsynth,
+    \freq, Pseq([Pseq([100, 200, Pseq([100, 800, 500, 600], 2), 600], 4), 500, 900], inf),
+    \dur, 0.129,
+    \legato, 1,
+)).play;
+Pdef(\fifth, PmonoArtic(\avsynth,
+    \freq, Pseq([Pseq([100, 200, Pseq([100, 200, 500], 2), 600], 8), 500, 900], inf),
+    \dur, 0.130,
+    \legato, 1,
+)).play;
+)
+
+\degree... -> \freq
+
+Scale.directory
+
+(
+Pdef(\thurday, PmonoArtic(\avsynth,
+    \degree, Pseq([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], inf),
+    \scale, Scale.mustar,
+    \dur, 0.25,
+)).play;
+)
+
+Tuning.directory
+
+(
+Pdef(\thurday, Pbind(\instrument, \avsynth,
+    \degree, Pseq([0, 1, 5, 4, 2, 1, Pseq([-5, 1, 8], 2)], inf),
+    \scale, Scale.chromatic(Tuning.just),
+    \dur, 0.25,
+)).play;
+)
+
+a= Synth(\avverb, [\in, 0, \out, 0]);
+b= Synth(\avdist, [\in, 0, \out, 0]);
+b.set(\dist, 40);
+b.set(\dist, 80);
+a.set(\room, 0.1);
+
+a.free; b.free;
+```
+
 - - -
 
 unity3d
@@ -140,16 +225,57 @@ public class Trail : MonoBehaviour {
 
 ![00template](00template.png?raw=true "00template")
 
-now edit the script while the scene is running and try changing the code in the update method. (you only need to switch back and forth between monodevelop and unity for the script to reload)
+now edit the script while the scene is running and try changing the code in the update method. (you'll need to switch back and forth between monodevelop and unity for the script to reload, if you modify the startup method you'll need to stop and play again for it to take effect).
 
 things to explore...
 
 * scale time to draw faster, scale x, y to draw wider
 * add a sine function for z `float z = Mathf.Sin (Time.time * 7.0F) * 5.5F;`
+* %
 * try to round some other numbers
 * modulate start color and trail time
 * add the script to a new (visible) game object like a sphere
 * etc
+
+some code we wrote in class...
+
+```cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Trail : MonoBehaviour {
+    TrailRenderer trail;
+    void Start () {
+        Application.runInBackground = true;
+        trail = gameObject.AddComponent<TrailRenderer>();
+        trail.material = new Material (Shader.Find("Particles/Additive"));
+    }
+    void Update () {
+        trail.time = 1.2F;
+        trail.startColor = Color.blue;
+        trail.endColor = Color.black;
+        trail.startWidth = 0.5F;
+        trail.endWidth = 0.0F;
+        float x = (Mathf.Sin (Time.time * 15.0F) + Mathf.Sin (Time.time * 1.3F)) * 1.5f ;
+        float y = (Mathf.Sin (Time.time * 14.0F) + Mathf.Sin (Time.time * 1.2F)) * 1.5f ;
+        float z = (Mathf.Sin (Time.time * 13.0F) + Mathf.Sin (Time.time * 1.1F)) * 1.5f ;
+        transform.localPosition= new Vector3 (x, y+5.0f, z);
+    }
+
+    /*void Update () {
+        trail.time = 2.2F;
+        trail.startColor = Color.blue;
+        trail.endColor = Color.black;
+        trail.startWidth = 0.5F;
+        trail.endWidth = 0.0F;
+        float x = Mathf.Sin (Time.time * 3.0F) * 5.5F;
+        float y = Mathf.Cos (Time.time * 5.0F) * 4.4F;
+        float z = Mathf.Sin (Time.time * 4.0F) * 5.5F;
+        transform.localPosition= new Vector3 (Mathf.Sin(x)*5.0f, Mathf.Sin(y)*5.0f, Mathf.Sin(z)*5.0f);
+    }*/
+}
+```
 
 look-up table
 --
@@ -187,3 +313,27 @@ first person character
 * optionally edit the settings for the camera inside the FirstPersonCharacter to use the same settings (Solid Color) as your main camera had in the example above
 
 ![02fps](02fps.png?raw=true "02fps")
+
+material
+--
+
+to use your own material for the trails do the following...
+
+* select Assets / Create / Material
+* call it something (here 'mymat') - name does not matter
+* adapt your script code to have a public variable `mat`
+
+```cs
+public Material mat;  //add this line
+void Start () {
+    Application.runInBackground = true;
+    trail = gameObject.AddComponent<TrailRenderer>();
+    trail.material = mat;  //and edit this line - it will set the trail material to whatever is in mat variable
+}
+```
+
+* save and switch back to unity
+* drag&drop your material onto the 'mat' slot in the inspector
+* it should now look like this...
+
+![03material](03material.png?raw=true "03material")
