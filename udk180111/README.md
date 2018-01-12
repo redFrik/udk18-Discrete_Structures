@@ -56,11 +56,11 @@ Pdef(\pat2, PmonoArtic(\avsynth,
 )
 
 //--effects
-a.free; a= Synth(\avdist, [\in, 50, \dist, 40]);  //distorion on bus 50
+a.free; a= Synth(\avdist, [\in, 50, \out, 0, \dist, 40]);  //distorion on bus 50
 b.free; b= Synth(\avverb, [\in, 60, \out, 50, \room, 10]);  //reverb on bus 60
 
-Pdef(\pat1).set(\out, 60);
-Pdef(\pat2).set(\out, 0);
+Pdef(\pat1).set(\out, 60);  //routing the sound synth -> verb -> dist -> speakers
+Pdef(\pat2).set(\out, 60);
 
 (
 Pdef(\pat3, PmonoArtic(\avsynth,
@@ -76,11 +76,11 @@ a.set(\dist, 40);
 b.set(\drylevel, 1);
 b.set(\drylevel, 0.1);
 Pdef(\pat3).set(\out, 60);
-a.set(\dist, 90);
-Pdef(\pat3).set(\mod, 5);
+a.set(\dist, 9);
 
 Pdef(\pat2).stop;
 Pdef(\pat1).stop;
+Pdef(\pat3).set(\mod, 5);
 Pdef(\pat3).set(\mod, 50);
 Pdef(\pat3).set(\mod, 500);
 Pdef(\pat3).stop;
@@ -113,6 +113,7 @@ Pdef(\pat1, PmonoArtic(\avsynth,
     \dur, 0.25,
     \cur, Pseq([0, 0, 0, 0, -12, 0, 0, 12], inf),
     \legato, Pseq([0.2, 1], inf),
+    \out, 0,
 )).play;
 )
 
@@ -151,12 +152,12 @@ Pdef(\fifth, PmonoArtic(\avsynth,
 
 \degree... -> \freq
 
-Scale.directory
+Scale.directory;
 
 (
 Pdef(\thurday, PmonoArtic(\avsynth,
     \degree, Pseq([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], inf),
-    \scale, Scale.mustar,
+    \scale, Scale.mustar,  //try different scales
     \dur, 0.25,
 )).play;
 )
@@ -166,7 +167,7 @@ Tuning.directory
 (
 Pdef(\thurday, Pbind(\instrument, \avsynth,
     \degree, Pseq([0, 1, 5, 4, 2, 1, Pseq([-5, 1, 8], 2)], inf),
-    \scale, Scale.chromatic(Tuning.just),
+    \scale, Scale.chromatic(Tuning.just),    //try different tunings (and scales)
     \dur, 0.25,
 )).play;
 )
@@ -179,6 +180,8 @@ a.set(\room, 0.1);
 
 a.free; b.free;
 ```
+
+check out the Event helpfile http://doc.sccode.org/Classes/Event.html for more ideas.
 
 - - -
 
