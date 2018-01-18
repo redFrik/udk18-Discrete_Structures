@@ -23,9 +23,9 @@ dates
 - [ ] 28dec: **NO CLASS**
 - [ ] 04jan: **NO CLASS**
 - [x] [11jan 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk180111): deeper into the code
-- [ ] 18jan 14-16
+- [ ] [18jan 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk180118): networking (osc)
 - [ ] 25jan 14-16
-- [ ] 1feb 14-16 (last meeting)
+- [ ] 01feb 14-16 (last meeting)
 
 links to previous semesters... <http://redfrik.github.io/udk00-Audiovisual_Programming/>
 

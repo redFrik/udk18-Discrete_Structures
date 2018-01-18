@@ -221,10 +221,11 @@ public class Trail : MonoBehaviour {
         transform.localPosition= new Vector3 (Mathf.Round(x), y, z);
     }
 }
-
 ```
 
-* switch back to unity and press play. you should see something like this...
+* switch back to unity
+* attach the script to the GameObject by drag and drop.
+* press play. you should see something like this...
 
 ![00template](00template.png?raw=true "00template")
 
