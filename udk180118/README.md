@@ -1,7 +1,7 @@
 networking
 --------------------
 
-osc (OpenSound Control) is a protocol/technique for sending messages over network. both supercollider and unity can receive and send osc. the network can be _inside_ your machine (between programs) or across a local network (between programs on different computers). there are also ways of sending osc over the internet to remote computers but that's more advanced.
+osc (OpenSound Control) is a protocol/technique for sending messages over network. both supercollider and unity can receive and send osc. the network can be _inside_ your machine (between programs) or across a local network (between programs on different computers). there are also ways of sending osc over the internet to remote computers but that's more advanced and will not be considered here.
 
 supercollider
 ==
@@ -32,9 +32,10 @@ Pdef(\pat1, PmonoArtic(\avclick,
 )).play;
 )
 
-//sc already use osc internally - between sclang and scsynth (the server)
+//sc already uses osc internally - between sclang and scsynth (the server)
+//to see the messages run this line...
 OSCdef.trace(true, true);  //turn on osc debugging
-//these messages we will later also send off to unity
+//these messages we will later pass on to unity
 
 (
 Pdef(\pat1, PmonoArtic(\avclick,
@@ -71,7 +72,7 @@ Pdef(\pat1, PmonoArtic(\avclick,
     \degree, Pseq([0, 1, 2, 3, 4, 5, 6], inf),
     \dur, 1,  //slow
     \legato, 0.05,
-    \server, Pseq([s, a, b], inf).trace,  //this decides which server to play on
+    \server, Pseq([s, a, b], inf).trace,  //this decides which server to play on - s is your own machine
 )).play;
 )
 
@@ -94,6 +95,10 @@ caught exception 'send_to: Host is down' in primitive in method NetAddr:sendBund
 ```
 
 then that means the server at one of the ip addresses is not reachable.
+
+note: there will be lots of latency and hickups in the rhytm. that is to be expected when using wifi and will also depend on the quality of the wifi network - how much traffic etc. if you need to greatly improve timing connect the computers via a router with ethernet cables.
+
+also note: this works because we all added the same synthdef above (called \avclick). if you want to play your own synthdefs on remote servers you will need to first send them over. do that by changing `.add;` in the end to `.send(b);`. this will send the synthdef to the server stored in variable `b`. or another technique to send over arbitrary synthdefs is to first add the servers to a synthdesclib with... `SynthDescLib.global.addServer(b);` and then `.add(\global);` will distribute that synthdef to all servers added to the global synthdesclib.
 
 - - -
 
@@ -240,7 +245,7 @@ sending
 
 in the screenshot above the 'Out IP' and 'Out Port' means to send out osc to another program running on the same machine (your computer). to receive what unity send that program will need to listen for osc on port 57120 - which supercollider does by default. sc can received osc with either the `OSCdef` or `OSCFunc` class.
 
-note: that before we used the port 57110 and not 57120 when making sound on other computers in the network. 57110 is the default port of supercollider _server_. below we will use 57120 and send to supercollider language because it is easier. but you could also send osc from unity directly to sc server and that'd be good to get an efficient and low latency connection between the program. this is more advanced though as the messages will have to be formatted in a special way for the server to understand.
+note: that before we used the port 57110 and not 57120 when making sound on other computers in the network. 57110 is the default port of supercollider _server_. below we will use 57120 and send to supercollider language because it is easier. but you could also send osc from unity directly to sc server and that'd be good to get an efficient and low latency connection between the program. this is more advanced though as the messages will have to be formatted in a special way for the server to understand and not described here.
 
 * select 'GameObject / 3D Object / Sphere'
 * create a new script by selecting Assets / Create / C# Script
@@ -321,9 +326,17 @@ things to try...
 * send osc to your neighbour - either from sc or from unity
 * try controlling the cube from sc at the same time as the sphere is controlling the sound
 * advanced: connect osc feedback by having patterns both controlling and being controlled the sphere (or cube, or both cross connected).
-* advanced: set up osc to/from some example we did previously
+* advanced: set up osc to/from some example we did previously this semester
 
 links
 ==
 
 https://thomasfredericks.github.io/UnityOSC/
+
+on osx you can find ip addresses with lanscan https://www.iwaxx.com/lanscan/
+
+fing is another program that works on android and ios
+
+on linux (and also osx) you can install nmap and then in terminal run `nmap -sn 192.168.1.0/24 -oG - | awk '/Up$/{print $2, $3}'`
+
+or, if you own the router, you can also log in to the administration page and normally there find a menu that lists all connected devices.
