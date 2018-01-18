@@ -203,7 +203,7 @@ Pdef(\patOsc, PmonoArtic(\avclick,
     \degree, Pseq([0, 1, 2, 3, 4, 5, 6, 7], inf),
     \dur, Pseq([0.25, 0.25, 0.125], inf),
     \legato, 0.2,
-    \amp, Pbjorklund(11, 16)*0.2,
+    \amp, Pseq([1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1], inf)*0.2,
     \osc, Pfunc({|e|
         n.sendMsg(\position, e.degree-5, 0, 0);
         n.sendMsg(\scale, e.amp*25+1, e.amp*25+1, e.amp*25+1);
@@ -218,7 +218,7 @@ Pdef(\patOsc2, PmonoArtic(\avclick,
     \degree, Pseq([0, 1, 2, 3, 4, 5, 6, 7], inf)+5,
     \dur, Pseq([0.25, 0.25, 0.125], inf),
     \legato, 0.5,
-    \amp, Pbjorklund(13, 16)*0.2,
+    \amp, Pseq([1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1], inf)*0.2,
     \osc, Pfunc({|e|
         n.sendMsg(\position, e.degree-5, 0, 0);
         n.sendMsg(\scale, e.amp*10+1, e.amp*10+1, e.amp*10+1);
@@ -275,13 +275,13 @@ public class Sender : MonoBehaviour {
         msg.values.Add(x);
         msg.values.Add(y);
         msg.values.Add(z);
-        osc.Send(msg);
+        oscHandler.Send(msg);
     }
 }
 ```
 
 * save and switch back to unity
-* drag&drop the receiver script onto the Sphere
+* drag&drop the sender script onto the Sphere
 * select the Sphere in the hierarchy window
 * again in the inspector find the script and where it says 'Osc Handler'
 * drag&drop the empty GameObject onto that variable slot
@@ -314,7 +314,7 @@ Pdef(\patxyz, PmonoArtic(\avclick,
     \mod, Pfunc({p[2].linexp(-5, 5, 0.01, 0.5)}),  //z-pos controls modulation
     \legato, Pseq([Pseq([0.2], 12), 1, 1, 1, 0.2], inf),
     \rel, Pfunc({p[2].linexp(-5, 5, 0.01, 1)}),  //z-pos (depth) also for note length
-    \amp, Pbjorklund(19, 32)*Pfunc({p[2].linlin(-5, 5, 0.5, 0.01)}),  //and for amplitude
+    \amp, Pseq([1, 1, 1, 0, 1, 1, 0, 0.5], inf)*Pfunc({p[2].linlin(-5, 5, 0.5, 0.01)}),  //and for amplitude
 )).play;
 )
 ```
@@ -327,6 +327,99 @@ things to try...
 * try controlling the cube from sc at the same time as the sphere is controlling the sound
 * advanced: connect osc feedback by having patterns both controlling and being controlled the sphere (or cube, or both cross connected).
 * advanced: set up osc to/from some example we did previously this semester
+
+colours
+--
+
+we can extend our receiving C# unity script to also understand a message with the address `\colour`. sp open the Receiver script and change it to this...
+
+```cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Receiver : MonoBehaviour {
+    public OSC oscHandler;
+    Renderer rend;    //added this variable
+    void Start () {
+        Application.runInBackground = true;
+        oscHandler.SetAddressHandler("/position", Position);
+        oscHandler.SetAddressHandler("/scale", Scale);
+        oscHandler.SetAddressHandler("/rotation", Rotation);
+        oscHandler.SetAddressHandler("/colour", Colour);    //and this line
+        rend= GetComponent<Renderer>();    //and here we set the rend variable
+    }
+    void Update () {
+    }
+    void Position(OscMessage msg) {
+        float x = msg.GetFloat(0);
+        float y = msg.GetFloat(1);
+        float z = msg.GetFloat(2);
+        transform.localPosition = new Vector3(x, y, z);
+    }
+    void Scale(OscMessage msg) {
+        float x = msg.GetFloat(0);
+        float y = msg.GetFloat(1);
+        float z = msg.GetFloat(2);
+        transform.localScale = new Vector3(x, y, z);
+    }
+    void Rotation(OscMessage msg) {
+        float x = msg.GetFloat(0);
+        float y = msg.GetFloat(1);
+        float z = msg.GetFloat(2);
+        transform.localEulerAngles = new Vector3(x, y, z);
+    }
+    void Colour(OscMessage msg) {    //and this method sets the colour of the material of the renderer when a message arrive
+        float r = msg.GetFloat(0);
+        float g = msg.GetFloat(1);
+        float b = msg.GetFloat(2);
+        float a = msg.GetFloat(3);
+        rend.material.color = new Color (r, g, b, a);
+    }
+}
+```
+
+it is almost the same code. there are only a few additions. but to make it work you also need to perform the following steps in unity...
+
+* select Assets / Create / Material
+* give the material a name (does not matter what)
+* in the inspector set the material's Rendering Mode to Transparent
+* drag&drop the material onto the Cube (or whichever object that uses the Receiver script)
+* press play and then in supercollider try the following lines one by one - the colour of the Cube should switch from red to green to blue.
+
+```supercollider
+n= NetAddr("127.0.0.1", 6969);
+n.sendMsg(\colour, 1, 0, 0, 1);
+n.sendMsg(\colour, 0, 1, 0, 1);
+n.sendMsg(\colour, 0, 0, 1, 1);
+n.sendMsg(\colour, 0, 0, 1, 0.05);  //blue but with very low alpha
+```
+
+if that works then try the following code...
+
+```supercollider
+(
+s.latency= 0.03;
+n= NetAddr("127.0.0.1", 6969);
+Pdef(\patOsc, PmonoArtic(\avclick,
+    \degree, Pseq([0, 1, 2, 3, 4, 5, 6, 7], inf),
+    \dur, 0.125,
+    \legato, 0.2,
+    \rel, Pseg([0.1, 0.6, 0.1], 18, 'lin', inf),
+    \mod, Pseg([0, 1, 0], 17, 'lin', inf),
+    \amp, Pseq([1, 1, 1, 1, 1, 1, 0], inf)*0.2,
+    \index, Ptime(),
+    \osc, Pfunc({|e|
+        n.sendMsg(\position, e.degree-3.5, e.mod, 0);
+        n.sendMsg(\scale, e.amp*10+0.2, e.amp*10+0.2, 1-e.amp*10);
+        n.sendMsg(\rotation, e.index*10, 0, 0);
+        n.sendMsg(\colour, e.rel, 1, e.rel, e.mod);
+    }),
+)).play;
+)
+```
+
+this will map a lot of parameters from the pattern sequencer and send them over to unity via osc. e.g. mod is controlling the alpha and rel the red and blue colour channels.
 
 links
 ==
