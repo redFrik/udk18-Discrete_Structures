@@ -331,7 +331,7 @@ things to try...
 colours
 --
 
-we can extend our receiving C# unity script to also understand a message with the address `\colour`. sp open the Receiver script and change it to this...
+we can extend our receiving C# unity script to also understand a message with the address `\colour`. so open the Receiver script and change it to this...
 
 ```cs
 using System.Collections;
@@ -369,7 +369,7 @@ public class Receiver : MonoBehaviour {
         float z = msg.GetFloat(2);
         transform.localEulerAngles = new Vector3(x, y, z);
     }
-    void Colour(OscMessage msg) {    //and this method sets the colour of the material of the renderer when a message arrive
+    void Colour(OscMessage msg) {    //added this method that sets the colour of the material of the renderer when a message arrives
         float r = msg.GetFloat(0);
         float g = msg.GetFloat(1);
         float b = msg.GetFloat(2);
@@ -379,7 +379,7 @@ public class Receiver : MonoBehaviour {
 }
 ```
 
-it is almost the same code. there are only a few additions. but to make it work you also need to perform the following steps in unity...
+it is almost the same code. there are only a few additions (see the comments). but to make it work you also need to perform the following steps in unity...
 
 * select Assets / Create / Material
 * give the material a name (does not matter what)
