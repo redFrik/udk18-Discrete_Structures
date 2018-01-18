@@ -1,14 +1,12 @@
 networking
 --------------------
 
-this time we will connect the two programs.
-
-osc (OpenSound Control) is a protocol for network messages. boh supercollider and unity can receive and send these.
+osc (OpenSound Control) is a protocol/technique for sending messages over network. both supercollider and unity can receive and send osc. the network can be _inside_ your machine (between programs) or across a local network (between programs on different computers). there are also ways of sending osc over the internet to remote computers but that's more advanced.
 
 supercollider
 ==
 
-first make sure we all connect to the same network.
+first make sure all computers that we want to send messages to are connected to the same [wifi] network.
 
 ```supercollider
 s.options.maxLogins= 8;
@@ -34,6 +32,10 @@ Pdef(\pat1, PmonoArtic(\avclick,
 )).play;
 )
 
+//sc already use osc internally - between sclang and scsynth (the server)
+OSCdef.trace(true, true);  //turn on osc debugging
+//these messages we will later also send off to unity
+
 (
 Pdef(\pat1, PmonoArtic(\avclick,
     \degree, Pseq([0, 1, 2, 3, 4, 5, 6], inf),
@@ -55,13 +57,14 @@ Pdef(\pat1, PmonoArtic(\avclick,
 )
 
 Pdef(\pat1).stop;
+OSCdef.trace(false);  //turn off osc debugging
 
 //--
 //now figure out the ip of some other machine running sc
 //must be connected to the same wifi network
 a= Server("neighbour", NetAddr("192.168.1.101", 57110));
-b= Server("neighbour2", NetAddr("192.168.1.102", 57110));
-//also try to add more here c, d, e etc
+b= Server("acrosstable", NetAddr("192.168.1.102", 57110));
+//also try to add more servers here and store them in variables c, d, e etc
 
 (
 Pdef(\pat1, PmonoArtic(\avclick,
@@ -90,7 +93,7 @@ ERROR: Primitive '_NetAddr_SendBundle' failed.
 caught exception 'send_to: Host is down' in primitive in method NetAddr:sendBundle
 ```
 
-then that means the server on one of the ip addresses is not reachable.
+then that means the server at one of the ip addresses is not reachable.
 
 - - -
 
@@ -100,7 +103,7 @@ unity3d
 * start unity and create a new 3D (or 2D) project
 * go to <https://github.com/thomasfredericks/UnityOSC> and click the green download button
 * get the .zip file and uncompress it
-* find the file `OSC.cs` the zip you just uncompressed (UnityOSC-master / Assets / OSC)
+* find the file `OSC.cs` inside the zip you just uncompressed (UnityOSC-master / Assets / OSC)
 * drag&drop it into unity's assets window
 * select 'GameObject / Create Empty'
 * drag&drop the osc script file onto the new game object
@@ -109,6 +112,8 @@ unity3d
 your scene should look like this...
 
 ![00osc](00osc.png?raw=true "00osc")
+
+note:  the number 6969 is the port number for incoming osc that unity will use. this can be different and change but then you need to adapt your sending code (in sc) to send to that port instead. you can have multiple listening ports open as long as they have different numbers. if you try 57110 for example (and your supercollider server is booted) your unity scene will complain when started... `System.Net.Sockets:Sockets.SocketException: Address already in use`. that means that that port is already taken and some other program is listening on it.
 
 receiving
 --
@@ -161,10 +166,10 @@ public class Receiver : MonoBehaviour {
 * in the inspector find the script and where it says 'Osc Handler'
 * drag&drop the empty GameObject onto that variable slot
 * click play and nothing should happen
-* switch to supercollider and run the following lines one by one
+* switch to supercollider and run the following lines one by one...
 
 ```supercollider
-n= NetAddr("127.0.0.1", 6969)
+n= NetAddr("127.0.0.1", 6969);
 n.sendMsg(\position, 1.1, 2.2, 3.3);
 n.sendMsg(\position, 0, 0, 0);
 n.sendMsg(\scale, 5, 1, 10);
@@ -175,7 +180,7 @@ Routine.run({300.do{|i| n.sendMsg(\rotation, i, i, i); (1/60).wait}});
 
 and then try with our patterns...
 
-```supercollider(
+```supercollider
 s.latency= 0.03;
 n= NetAddr("127.0.0.1", 6969);
 Pdef(\patOsc, PmonoArtic(\avclick,
@@ -202,7 +207,7 @@ Pdef(\patOsc, PmonoArtic(\avclick,
 )).play;
 )
 
-//a second conflicting pattern sequencer (overriding the osc messages above)
+//start a second conflicting pattern sequencer (overriding the osc messages above)
 (
 Pdef(\patOsc2, PmonoArtic(\avclick,
     \degree, Pseq([0, 1, 2, 3, 4, 5, 6, 7], inf)+5,
@@ -223,8 +228,19 @@ Pdef(\patOsc2).stop;
 
 go to unity and click stop.
 
+things to try...
+
+* click on the Cube and select Component / Physics / Rigidbody. this will make the Cube be affected by scene gravity and constantly fall. run the sc code to reset its position. play around with parameters like Mass and Drag. you can also change world gravity in Edit / Project Settings / Physics
+* duplicate the Cube a few times. (the rigidbody will make them bounce off each other as the osc is trying to position them at the same place)
+* do not forget changing the Clear Flags and background colours of the Main Camera
+* try changing the line `n= NetAddr("127.0.0.1", 6969);` in the supercollider code. make it send osc to another machine on the same network i.e. `n= NetAddr("192.168.1.100", 6969);`. now your sc patterns should control someone else's spheres in unity.
+
 sending
 --
+
+in the screenshot above the 'Out IP' and 'Out Port' means to send out osc to another program running on the same machine (your computer). to receive what unity send that program will need to listen for osc on port 57120 - which supercollider does by default. sc can received osc with either the `OSCdef` or `OSCFunc` class.
+
+note: that before we used the port 57110 and not 57120 when making sound on other computers in the network. 57110 is the default port of supercollider _server_. below we will use 57120 and send to supercollider language because it is easier. but you could also send osc from unity directly to sc server and that'd be good to get an efficient and low latency connection between the program. this is more advanced though as the messages will have to be formatted in a special way for the server to understand.
 
 * select 'GameObject / 3D Object / Sphere'
 * create a new script by selecting Assets / Create / C# Script
@@ -239,6 +255,7 @@ using UnityEngine;
 
 public class Sender : MonoBehaviour {
     public OSC oscHandler;
+    public string address = "/pos";
     void Start () {
         Application.runInBackground = true;
     }
@@ -249,7 +266,7 @@ public class Sender : MonoBehaviour {
         transform.localPosition= new Vector3 (x, y, z);
 
         OscMessage msg= new OscMessage();
-        msg.address = "/pos";
+        msg.address = address;
         msg.values.Add(x);
         msg.values.Add(y);
         msg.values.Add(z);
@@ -268,22 +285,22 @@ public class Sender : MonoBehaviour {
 
 ```supercollider
 OSCdef.trace(true, true);  //this should start posting a lot of data
-
 OSCdef.trace(false);  //turn it off
 ```
 
-if that works set up a receiver for the `\pos` address in sc like this...
+if that works set up a osc receiver/listener for the `\pos` address in sc like this...
 
 ```supercollider
 OSCdef(\pos, {|msg| p= msg.copyRange(1, 3).postln}, \pos);  //assign to variable p and also post
 ```
 
-so now `p[0]` will contain our x position, `p[1]` the y and `p[2]` z position.
+so now `p[0]` will contain our x position, `p[1]` the y and `p[2]` the z position.
 
 we can use them in a patter sequencer like this...
 
 ```supercollider
 (
+p= [0, 0, 0];
 OSCdef(\pos, {|msg| p= msg.copyRange(1, 3)}, \pos);
 Pdef(\patxyz, PmonoArtic(\avclick,
     \degree, Pfunc({p[1].linlin(-5, 5, -8, 8)}).round,  //y-pos (height) mapped to pitch
@@ -297,13 +314,13 @@ Pdef(\patxyz, PmonoArtic(\avclick,
 )
 ```
 
-now try writing the script for the movement of the Sphere.
+now try editing the script for the movement of the Sphere (in the Sender script).
 
 things to try...
 
 * send osc to your neighbour - either from sc or from unity
 * try controlling the cube from sc at the same time as the sphere is controlling the sound
-* advanced: connect osc feedback by having patterns both controlling and being controlled the sphere (or cube, or both crossconnected).
+* advanced: connect osc feedback by having patterns both controlling and being controlled the sphere (or cube, or both cross connected).
 * advanced: set up osc to/from some example we did previously
 
 links
