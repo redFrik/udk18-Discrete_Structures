@@ -620,6 +620,8 @@ move the main camera around and you should hear and see the patterns objects com
 
 if you do not hear or see anything move the camera to the middle (7.5, 5.5, 4)
 
+note: if you want to attach the listener script above to a first-person controller instead of the main camera, change all the `localPosition` to just `position` in the update method.
+
 links
 ==
 
