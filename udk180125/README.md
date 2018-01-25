@@ -573,6 +573,7 @@ var numX= 16;
 var numY= 12;
 var numZ= 9;
 var n= NetAddr("127.0.0.1", 6969);
+~amps= ~amps??{Array.fill(numZ, {Array.fill(numY, {Array.fill(numX, 1)})})};
 s.latency= 0.05;
 numZ.do{|z|
     if(z>0, {
@@ -581,7 +582,7 @@ numZ.do{|z|
             var name= "pat%_%".format(z, y).asSymbol;
             Pdef(name, PmonoArtic(\avball,
                 \dur, 0.125,//+(y*0.001),
-                \amp, Pbjorklund(z, numX, inf, off)*0.02*Pdefn(name, Pseq(1!numX, inf)),
+                \amp, Pbjorklund(z, numX, inf, off)*0.02,
                 \degree, y,
                 \octave, 4,
                 \scale, Scale.minor,
@@ -594,7 +595,13 @@ numZ.do{|z|
                 \legato, 0.1,
                 \x, Pseries(off, 1, inf)%numX,
                 \rest, Pswitch([Rest(), 1], Pkey(\amp)>0),
-                \osc, Pfunc({|e| if(e.rest==1, {n.sendMsg(\listen, e.x, y, z, e.degree, e.amp)}); e}),
+                \osc, Pfunc({|e|
+                    e.amp= e.amp*~amps[z][y][e.x];
+                    if(e.rest==1, {  //only send if \rest is not a Rest
+                        n.sendMsg(\listen, e.x, y, z, e.degree, e.amp)
+                    });
+                    e;
+                }),
             )).play;
         };
     });
@@ -602,9 +609,8 @@ numZ.do{|z|
 OSCdef(\listener, {|msg|
     var z= msg[1];
     numY.do{|y|
-        var name= "pat%_%".format(z, y).asSymbol;
         var arr= msg.copyRange(y*numX+2, y+1*numX+1);
-        Pdefn(name, Pseq(arr.abs.lincurve(0, 10, 1, 0, -1), inf));  //10 here is hearing area
+        ~amps[z][y]= arr.abs.lincurve(0, 5, 1, 0, -3);  //here 5 is hearing area, and -3 volume curve
     };
 }, \dist);
 )
