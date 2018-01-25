@@ -26,7 +26,7 @@ var numX= 16, numY= 8;
 numX.do{|x|
     if(x>0, {
         numY.do{|y|
-            var name= "pat%%".format(x, y).asSymbol;
+            var name= "pat%_%".format(x, y).asSymbol;
             Pdef(name, PmonoArtic(\avball,
                 \dur, Pbjorklund2(x, numX, inf, y)*0.125+(x+y*0.0001),
                 \amp, 0.02*Pdefn(name, 1),
@@ -113,7 +113,7 @@ SynthDef(\avball, {|out= 0, freq= 400, atk= 0.01, rel= 0.1, cur= -9, amp= 0.1, g
 osc123
 ==
 
-this example uses three scripts (Line, Plane and Cube). we can keep them in the same basic scene but not run them simultaneously.
+this example uses four scripts (Line, Plane, Cube and Listener). we can keep them in the same basic scene but not run them simultaneously.
 
 setup
 --
@@ -557,7 +557,7 @@ Pdef(name, PmonoArtic(\avball,
 
 move the main camera around and you should hear and see the patterns objects come and go.
 
-if you do not hear or see anything move the camera to the middle (0, 0, 0)
+if you do not hear or see anything move the camera to the middle (7.5, 5.5, 0)
 
 links
 ==
