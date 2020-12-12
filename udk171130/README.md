@@ -5,7 +5,7 @@ supercollider
 ==
 
 first we need to find a few soundfiles to use. the examples below expects a mono drumloop sample that is four beats long as well as five single drum sound samples (preferably from a 808 drum machine).
-find your own or download free ones from [here](http://www.users.globalnet.co.uk/%7Espufus/drums.htm) and [here](http://trashaudio.com/2010/01/roland-tr-808-sample-pack).
+find your own or download free ones from [here](http://www.users.globalnet.co.uk/%7Espufus/drums.htm) and [here](https://www.drumkito.com/sample-packs/roland-tr-808-sample-pack/).
 
 NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.wav`
 

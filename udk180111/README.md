@@ -181,7 +181,7 @@ a.set(\room, 0.1);
 a.free; b.free;
 ```
 
-check out the Event helpfile http://doc.sccode.org/Classes/Event.html for more ideas.
+check out the Event helpfile https://doc.sccode.org/Classes/Event.html for more ideas.
 
 - - -
 

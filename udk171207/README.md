@@ -18,7 +18,7 @@ and if that works write it to a 16bit, 44100 aiff soundfile like this...
 
 the file should end up on your desktop.
 
-you can also download a wav or aiff from the internet or record your own using for example [Audacity](http://www.audacityteam.org). vocal recordings or speech should work well.
+you can also download a wav or aiff from the internet or record your own using for example [Audacity](https://www.audacityteam.org). vocal recordings or speech should work well.
 
 NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.wav`
 

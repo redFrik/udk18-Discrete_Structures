@@ -5,11 +5,11 @@ whitney
 
 "_...if one element were set to move at a given rate, the next element might be moved two times that rate. Then the third would move at three times that rate and so on._" - John Whitney, Digital Harmony page 38
 
-Memo Akten - http://www.memo.tv/simple-harmonic-motion/
+Memo Akten - https://www.memo.tv/works/simple-harmonic-motion/
 
-https://youtu.be/yVkdfJ9PkRQ
+https://www.youtube.com/watch?v=yVkdfJ9PkRQ  Pendulum Waves
 
-http://www.memo.tv/simple-harmonic-motion-12-for-16-percussionists-at-rncm/
+https://www.memo.tv/works/simple-harmonic-motion-12-for-16-percussionists-at-rncm/
 
 supercollider
 ==
@@ -519,8 +519,8 @@ links
 
 see also https://github.com/redFrik/udk02-Audiovisual_Programming/blob/master/10rotation.scd
 
-and these [supercollider classes](http://www.fredrikolofsson.com/f0blog/?q=node/440)
+and these [supercollider classes](https://fredrikolofsson.com/f0blog/whitney-balls/)
 
-John Whitney’s Digital Harmony – On the Complementarity of Music and Visual Art - http://www.dataisnature.com/?p=2274
+John Whitney’s Digital Harmony – On the Complementarity of Music and Visual Art - https://www.dataisnature.com/?p=2274
 
-http://whitneymusicbox.org/ (warning - macromedia flash needed)
+http://whitneymusicbox.org/

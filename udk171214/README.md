@@ -8,7 +8,7 @@ again we need to find some soundfiles to work with. like last week something lik
 
 download this one... https://raw.githubusercontent.com/redFrik/udk18-Discrete_Structures/master/udk171214/granular.aiff (on osx you can alt+click the link to download the file directly)
 
-or record your own using [Audacity](http://www.audacityteam.org).
+or record your own using [Audacity](https://www.audacityteam.org).
 
 NOTE: can not be `.mp3`. in supercollider it is recommended to use `.aiff` or `.wav`
 
@@ -525,4 +525,4 @@ links
 
 https://en.wikipedia.org/wiki/Granular_synthesis
 
-[Introduction To Unity: Particle Systems](https://www.raywenderlich.com/113049/introduction-unity-particle-systems)
+[Introduction To Unity: Particle Systems](https://www.raywenderlich.com/138-introduction-to-unity-particle-systems)

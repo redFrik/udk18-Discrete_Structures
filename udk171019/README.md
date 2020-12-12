@@ -1,10 +1,10 @@
 introduction and overview
 --------------------
 
-* links to previous semesters... <http://redfrik.github.io/udk00-Audiovisual_Programming/>
+* links to previous semesters... <https://redfrik.github.io/udk00-Audiovisual_Programming/>
 * and dates + times for this course... <https://github.com/redFrik/udk18-Discrete_Structures> <-save this page
-* install [supercollider](http://supercollider.github.io/download) (most versions will work but v3.8 is recommended)
-* install [unity](http://unity3d.com) (the free version. one will need to register)
+* install [supercollider](https://supercollider.github.io/download) (most versions will work but v3.8 is recommended)
+* install [unity](https://unity3d.com) (the free version. one will need to register)
 
 supercollider
 ==
@@ -14,7 +14,7 @@ supercollider
   * to evaluate (run) a line, put the cursor on the line and press cmd+return (or ctrl+return on windows)
   * to evaluate a block of code, put the cursor somewhere inside the () and press cmd+return (or ctrl+return on windows)
 
-see http://doc.sccode.org/Guides/SCIde.html
+see https://doc.sccode.org/Guides/SCIde.html
 
 ```supercollider
 //--boot the server
@@ -592,6 +592,6 @@ the screenshot above is with: `float spacing= 3.0F;` and `float scale = 0.9F;` i
 links
 ==
 
-inspiration http://thedotisblack.tumblr.com
+inspiration https://thedotisblack.com
 
 Terry Riley - [A Rainbow in Curved Air](https://www.youtube.com/watch?v=5PNbEfLIEDs)

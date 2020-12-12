@@ -10,6 +10,7 @@ first make sure all computers that we want to send messages to are connected to 
 
 ```supercollider
 s.options.maxLogins= 8;
+s.options.bindAddress= "0.0.0.0";
 s.reboot;
 s.meter;
 s.scope;

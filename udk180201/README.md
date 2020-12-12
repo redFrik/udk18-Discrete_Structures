@@ -207,6 +207,6 @@ Pdef(\mysong, PmonoArtic(\default,
 links
 ==
 
-code repository... http://sccode.org
+code repository... https://sccode.org
 
 how to install the steam vr plugin... https://github.com/redFrik/udk16-Immersive_Technologies/tree/master/udk170105#virtual-reality

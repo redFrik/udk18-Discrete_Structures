@@ -3,7 +3,7 @@ udk-avprogramming 2017-2018_WS
 
 Olofsson: Audiovisual Programming - Discrete Structures
 
-The theme this semester is patterns - both in sound and in graphics - both in time and in space. We will experiment with rhythm and repetitive melodic structures in music, build worlds by arranging simple objects in 3D and in general learn how to code algorithms that generate interesting patterns. [Unity](http://unity3d.com) and [SuperCollider](http://supercollider.github.io) are the software we will focus on and the course will be will be taught in English. Bring your own laptop and headphones.
+The theme this semester is patterns - both in sound and in graphics - both in time and in space. We will experiment with rhythm and repetitive melodic structures in music, build worlds by arranging simple objects in 3D and in general learn how to code algorithms that generate interesting patterns. [Unity](https://unity3d.com) and [SuperCollider](https://supercollider.github.io) are the software we will focus on and the course will be will be taught in English. Bring your own laptop and headphones.
 
 room111, UdK, medienhaus, kleistpark
 
@@ -27,6 +27,6 @@ dates
 - [x] [25jan 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk180125): advanced examples
 - [x] [01feb 14-16](https://github.com/redFrik/udk18-Discrete_Structures/tree/master/udk180201): recapitulation (last meeting)
 
-links to previous semesters... <http://redfrik.github.io/udk00-Audiovisual_Programming/>
+links to previous semesters... <https://redfrik.github.io/udk00-Audiovisual_Programming/>
 
 ![Discrete_Structures](Discrete_Structures.png?raw=true "Discrete_Structures")
